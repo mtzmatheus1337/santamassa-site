@@ -1,0 +1,2731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santa Massa — Grupo de Restaurantes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #8A6D2F;
+    --cream: #F0EDE6;
+    --cream-dim: #CCC8BF;
+    --dark: #2E2E2E;
+    --dark2: #383838;
+    --dark3: #424242;
+    --dark4: #4E4E4E;
+    --text: #F0EDE6;
+    --text-muted: #A8A49C;
+    --red: #8B2020;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: rgba(46,46,46,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 0.6rem 2.5rem; }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+  }
+  .nav-logo span { font-style: italic; }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-btn-pedir {
+    background: var(--gold);
+    color: var(--dark);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.1rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn-pedir:hover { background: var(--gold-light); }
+
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--dark); }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 1px; background: var(--gold); transition: all 0.3s; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center bottom, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+
+  .hero-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 1.5rem auto 3rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+
+  .hero-buttons {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2.2rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(237,229,208,0.3);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2.2rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn-pedir-hero {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2.2rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-pedir-hero:hover { background: var(--gold); color: var(--dark); }
+
+  .hero-divider {
+    margin-top: 5rem;
+    display: flex; align-items: center; gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 1s 1.1s forwards;
+  }
+  .hero-divider::before, .hero-divider::after {
+    content: ''; flex: 1; max-width: 80px;
+    height: 1px; background: rgba(201,168,76,0.3);
+  }
+  .hero-divider span {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* UNIDADES CARDS */
+  .units-strip {
+    display: flex; gap: 1px;
+    background: rgba(201,168,76,0.1);
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 1.3s forwards;
+  }
+  .unit-tab {
+    flex: 1;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    background: var(--dark2);
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+  .unit-tab:hover { background: var(--dark3); }
+  .unit-tab-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--cream);
+  }
+  .unit-tab-city {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 0.2rem;
+  }
+
+  /* SECTIONS */
+  section { padding: 7rem 2rem; }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  .section-body {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 580px;
+    line-height: 1.8;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* HISTÓRIA */
+  #historia {
+    background: var(--dark2);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .historia-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .historia-visual {
+    position: relative;
+    padding: 3rem;
+  }
+  .historia-visual::before {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+  .historia-visual::after {
+    content: '';
+    position: absolute; top: -8px; left: -8px; right: 8px; bottom: 8px;
+    border: 1px solid rgba(201,168,76,0.08);
+  }
+
+  .historia-year {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 7rem;
+    font-weight: 300;
+    color: rgba(201,168,76,0.12);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .historia-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    position: relative;
+  }
+  .historia-quote::before {
+    content: '"';
+    font-size: 4rem;
+    color: var(--gold);
+    line-height: 0;
+    vertical-align: -1rem;
+    margin-right: 0.2rem;
+  }
+
+  .timeline { margin-top: 3rem; }
+  .timeline-item {
+    display: flex; gap: 1.5rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-year {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    min-width: 60px;
+    font-weight: 400;
+  }
+  .timeline-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* UNIDADES */
+  #unidades { background: var(--dark); }
+
+  .unidades-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(201,168,76,0.1);
+    margin-top: 4rem;
+  }
+
+  .unidade-card {
+    background: var(--dark2);
+    padding: 3rem 2.5rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .unidade-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .unidade-card:hover { background: var(--dark3); }
+  .unidade-card:hover::before { transform: scaleX(1); }
+
+  .unidade-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    color: rgba(201,168,76,0.15);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .unidade-nome {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+  .unidade-cidade {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .unidade-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .unidade-info { margin-bottom: 2rem; }
+  .unidade-info-item {
+    display: flex; gap: 0.8rem; align-items: flex-start;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+  }
+  .unidade-info-icon { color: var(--gold); min-width: 16px; }
+
+  .unidade-actions { display: flex; flex-direction: column; gap: 0.6rem; }
+  .unidade-btn {
+    display: block;
+    text-align: center;
+    padding: 0.7rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .unidade-btn-gold {
+    background: var(--gold);
+    color: var(--dark);
+  }
+  .unidade-btn-gold:hover { background: var(--gold-light); }
+  .unidade-btn-outline {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(237,229,208,0.15);
+  }
+  .unidade-btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* CARDÁPIO */
+  #cardapio {
+    background: var(--dark2);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .cardapio-tabs {
+    display: flex; gap: 0; margin: 3rem 0 2rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .cardapio-tab {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+  }
+  .cardapio-tab:hover { color: var(--text); }
+  .cardapio-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .cardapio-panel { display: none; }
+  .cardapio-panel.active { display: block; }
+
+  .cardapio-category {
+    margin-bottom: 3rem;
+  }
+  .cardapio-category-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .cardapio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: rgba(201,168,76,0.08);
+  }
+  .cardapio-item {
+    background: var(--dark3);
+    padding: 1.5rem;
+    transition: background 0.2s;
+  }
+  .cardapio-item:hover { background: var(--dark4); }
+  .cardapio-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+  .cardapio-item-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 0.8rem;
+  }
+  .cardapio-item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  /* RESERVAS */
+  #reservas { background: var(--dark); }
+
+  .reserva-container {
+    max-width: 760px;
+    margin: 4rem auto 0;
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 3.5rem;
+  }
+
+  .reserva-form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--cream);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .form-row.full { grid-template-columns: 1fr; }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .form-input, .form-select, .form-textarea {
+    background: var(--dark3);
+    border: 1px solid rgba(201,168,76,0.15);
+    color: var(--text);
+    padding: 0.85rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    appearance: none;
+  }
+  .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+  .form-select option { background: #383838; color: #F0EDE6; }
+  .form-textarea { min-height: 100px; resize: vertical; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(158,146,120,0.5); }
+
+  .btn-whatsapp {
+    display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+    width: 100%;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    padding: 1.1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 2rem;
+  }
+  .btn-whatsapp:hover { background: var(--gold-light); }
+
+  .whatsapp-icon {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+  }
+
+  .form-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark2);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding: 4rem 2rem 2rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+  }
+
+  .footer-brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .footer-brand-tagline {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .footer-col-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+  .footer-col-links { list-style: none; }
+  .footer-col-links li { margin-bottom: 0.6rem; }
+  .footer-col-links a {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col-links a:hover { color: var(--text); }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .footer-social { display: flex; gap: 1rem; }
+  .footer-social a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+
+  /* GALERIA */
+  #galeria { background: var(--dark3); border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); }
+
+  .galeria-filter {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 2rem 0 2.5rem;
+  }
+  .galeria-filter-btn {
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--text-muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.45rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .galeria-filter-btn:hover, .galeria-filter-btn.active {
+    background: var(--gold); color: var(--dark); border-color: var(--gold);
+  }
+
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+  }
+  .galeria-item {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--dark4);
+  }
+  .galeria-item.wide { grid-column: span 2; aspect-ratio: 2/1; }
+  .galeria-item.tall { grid-row: span 2; aspect-ratio: 1/2; }
+  .galeria-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    transition: background 0.3s;
+  }
+  .galeria-item:hover .galeria-placeholder { background: rgba(201,168,76,0.05); }
+  .galeria-placeholder-icon { font-size: 2rem; opacity: 0.3; }
+  .galeria-placeholder-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; }
+  .galeria-overlay {
+    position: absolute; inset: 0;
+    background: rgba(46,46,46,0);
+    display: flex; align-items: flex-end;
+    padding: 1rem;
+    transition: background 0.3s;
+  }
+  .galeria-item:hover .galeria-overlay { background: rgba(46,46,46,0.60); }
+  .galeria-overlay-tag {
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); opacity: 0; transition: opacity 0.3s;
+    border: 1px solid rgba(201,168,76,0.4); padding: 0.2rem 0.6rem;
+  }
+  .galeria-item:hover .galeria-overlay-tag { opacity: 1; }
+
+  .galeria-note {
+    text-align: center; margin-top: 1.5rem;
+    font-size: 0.78rem; color: var(--text-muted);
+  }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(46,46,46,0.96);
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-close {
+    position: absolute; top: 1.5rem; right: 2rem;
+    background: none; border: none; color: var(--gold);
+    font-size: 2rem; cursor: pointer;
+  }
+  .lightbox-img {
+    max-width: 80vw; max-height: 80vh;
+    border: 1px solid rgba(201,168,76,0.2);
+    object-fit: contain;
+  }
+  .lightbox-placeholder {
+    width: 600px; max-width: 80vw; height: 400px;
+    background: var(--dark3);
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem; color: var(--text-muted);
+  }
+
+  /* DEPOIMENTOS */
+  #depoimentos { background: var(--dark2); border-top: 1px solid rgba(201,168,76,0.1); }
+
+  .depoimentos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(201,168,76,0.08);
+    margin-top: 3.5rem;
+  }
+  .depoimento-card {
+    background: var(--dark2); padding: 2.5rem;
+    transition: background 0.2s;
+  }
+  .depoimento-card:hover { background: var(--dark3); }
+  .depoimento-stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .depoimento-texto {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-style: italic;
+    color: var(--cream-dim); line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .depoimento-autor { display: flex; align-items: center; gap: 0.8rem; }
+  .depoimento-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--dark4);
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .depoimento-nome { font-size: 0.85rem; color: var(--text); }
+  .depoimento-unidade { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .depoimento-fonte { font-size: 0.65rem; color: rgba(158,146,120,0.5); margin-top: 0.2rem; }
+
+  .depoimentos-cta {
+    text-align: center; margin-top: 2.5rem;
+  }
+  .depoimentos-cta a {
+    font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+  .depoimentos-cta a:hover { border-color: var(--gold); }
+
+  /* IFOOD / DELIVERY */
+  #delivery { background: var(--dark); border-top: 1px solid rgba(201,168,76,0.1); }
+
+  .delivery-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(201,168,76,0.08); margin-top: 3.5rem;
+  }
+  .delivery-card {
+    background: var(--dark2); padding: 2.5rem;
+    display: flex; flex-direction: column;
+    transition: background 0.2s;
+  }
+  .delivery-card:hover { background: var(--dark3); }
+  .delivery-card-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .delivery-badge {
+    background: #EA1D2C; color: #fff;
+    font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.25rem 0.6rem; border-radius: 2px;
+    font-family: 'Outfit', sans-serif;
+  }
+  .delivery-card-nome {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; color: var(--cream); margin-bottom: 0.3rem;
+  }
+  .delivery-card-cidade {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .delivery-card-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; flex: 1; margin-bottom: 1.5rem; }
+  .delivery-btn {
+    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    background: #EA1D2C; color: #fff;
+    border: none; cursor: pointer;
+    font-family: 'Outfit', sans-serif; font-size: 0.78rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; transition: background 0.2s; text-align: center;
+  }
+  .delivery-btn:hover { background: #c4111f; }
+  .delivery-btn-disabled {
+    background: var(--dark4); color: var(--text-muted);
+    border: 1px solid rgba(201,168,76,0.1); cursor: default;
+  }
+  .delivery-btn-disabled:hover { background: var(--dark4); }
+
+  /* MAPAS */
+  #mapas { background: var(--dark2); border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); }
+
+  .mapas-tabs {
+    display: flex; gap: 0; margin: 3rem 0 0;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .mapas-tab {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-muted); cursor: pointer; border: none;
+    background: transparent; border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: all 0.2s; font-family: 'Outfit', sans-serif;
+  }
+  .mapas-tab:hover { color: var(--text); }
+  .mapas-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .mapas-panel { display: none; }
+  .mapas-panel.active { display: grid; grid-template-columns: 1fr 1.4fr; gap: 0; }
+
+  .mapa-info {
+    background: var(--dark3); padding: 3rem 2.5rem;
+    display: flex; flex-direction: column; justify-content: center;
+    border-right: 1px solid rgba(201,168,76,0.08);
+  }
+  .mapa-unidade-nome {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; color: var(--cream); margin-bottom: 0.3rem;
+  }
+  .mapa-cidade {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 2rem;
+  }
+  .mapa-detail { display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start; }
+  .mapa-detail-icon { color: var(--gold); font-size: 1rem; min-width: 20px; margin-top: 2px; }
+  .mapa-detail-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+  .mapa-detail-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); opacity: 0.6; margin-bottom: 0.2rem; }
+
+  .mapa-actions { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .mapa-btn {
+    display: block; text-align: center; padding: 0.75rem 1rem;
+    font-family: 'Outfit', sans-serif; font-size: 0.75rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .mapa-btn-gold { background: var(--gold); color: var(--dark); }
+  .mapa-btn-gold:hover { background: var(--gold-light); }
+  .mapa-btn-outline { background: transparent; color: var(--text-muted); border: 1px solid rgba(237,229,208,0.15); }
+  .mapa-btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .mapa-embed {
+    min-height: 420px;
+    background: var(--dark4);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem; color: var(--text-muted);
+  }
+  .mapa-embed iframe { width: 100%; height: 100%; min-height: 420px; border: none; filter: grayscale(0.3) invert(0.9) hue-rotate(185deg); }
+  .mapa-placeholder-text { font-size: 0.78rem; letter-spacing: 0.1em; text-align: center; padding: 2rem; }
+
+  /* FAQ */
+  #faq { background: var(--dark); }
+
+  .faq-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: rgba(201,168,76,0.08); margin-top: 3.5rem;
+  }
+  .faq-item {
+    background: var(--dark2); padding: 0;
+    border-bottom: none;
+  }
+  .faq-question {
+    width: 100%; text-align: left; padding: 1.6rem 2rem;
+    background: transparent; border: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    font-family: 'Outfit', sans-serif; font-size: 0.92rem;
+    color: var(--text); transition: color 0.2s;
+  }
+  .faq-question:hover { color: var(--gold); }
+  .faq-question.open { color: var(--gold); }
+  .faq-icon {
+    color: var(--gold); font-size: 1.2rem; line-height: 1;
+    transition: transform 0.3s; flex-shrink: 0;
+  }
+  .faq-question.open .faq-icon { transform: rotate(45deg); }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    padding: 0 2rem;
+    font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;
+  }
+  .faq-answer.open { max-height: 300px; padding: 0 2rem 1.6rem; }
+
+  /* LANGUAGE TOGGLE */
+  .lang-toggle {
+    display: flex; align-items: center; gap: 0;
+    border: 1px solid rgba(201,168,76,0.3);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .lang-btn {
+    background: transparent; border: none;
+    color: var(--text-muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.1em;
+    padding: 0.35rem 0.65rem;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-btn.active { background: var(--gold); color: var(--dark); }
+  .lang-btn:not(.active):hover { color: var(--gold); }
+  .lang-sep { width: 1px; background: rgba(201,168,76,0.3); height: 100%; align-self: stretch; }
+
+  /* ORNAMENT */
+  .ornament {
+    display: flex; align-items: center; gap: 1.2rem;
+    margin: 2.5rem 0;
+  }
+  .ornament::before, .ornament::after {
+    content: ''; flex: 1;
+    height: 1px; background: rgba(201,168,76,0.2);
+  }
+  .ornament-icon {
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Hero elements always visible — no animation dependency */
+  .hero-eyebrow, .hero-title, .hero-subtitle,
+  .hero-buttons, .hero-divider, .units-strip {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    animation: none !important;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Fallback: if JS IntersectionObserver doesn't fire, show content */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  /* MOBILE NAV */
+  .mobile-menu {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(46,46,46,0.98);
+    z-index: 99;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--cream);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+  .mobile-menu-close {
+    position: absolute; top: 1.5rem; right: 2rem;
+    background: none; border: none;
+    color: var(--gold); font-size: 2rem; cursor: pointer;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .historia-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .unidades-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .nav-links { display: none; }
+    .nav-cta, .nav-btn-pedir { display: none; }
+    .hamburger { display: flex; }
+    .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+    .galeria-item.wide { grid-column: span 2; }
+    .galeria-item.tall { grid-row: span 1; aspect-ratio: 1; }
+    .depoimentos-grid { grid-template-columns: 1fr; }
+    .delivery-grid { grid-template-columns: 1fr; }
+    .mapas-panel.active { grid-template-columns: 1fr; }
+    .mapa-embed { min-height: 280px; }
+    .faq-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .reserva-container { padding: 2rem 1.5rem; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .units-strip { flex-direction: column; gap: 1px; }
+    .cardapio-tabs { overflow-x: auto; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Santa <span>Massa</span></a>
+  <ul class="nav-links">
+    <li><a href="#historia" data-i18n="nav-historia">Nossa História</a></li>
+    <li><a href="#unidades" data-i18n="nav-unidades">Unidades</a></li>
+    <li><a href="#cardapio" data-i18n="nav-cardapio">Cardápio</a></li>
+    <li><a href="#galeria" data-i18n="nav-galeria">Galeria</a></li>
+    <li><a href="#reservas" data-i18n="nav-reservas">Reservas</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://pediraqui.com/santamassa" target="_blank" class="nav-btn-pedir" data-i18n="nav-pedir">🛒 Pedir Online</a>
+  <a href="#reservas" class="nav-cta" data-i18n="nav-cta">Reservar Mesa</a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btn-pt" onclick="setLang('pt')">PT</button>
+    <div class="lang-sep"></div>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMenu()">✕</button>
+  <a href="#historia" onclick="toggleMenu()" data-i18n="nav-historia">Nossa História</a>
+  <a href="#unidades" onclick="toggleMenu()" data-i18n="nav-unidades">Unidades</a>
+  <a href="#cardapio" onclick="toggleMenu()" data-i18n="nav-cardapio">Cardápio</a>
+  <a href="#galeria" onclick="toggleMenu()" data-i18n="nav-galeria">Galeria</a>
+  <a href="#reservas" onclick="toggleMenu()" data-i18n="nav-reservas">Reservas</a>
+  <a href="#faq">FAQ</a>
+  <a href="https://pediraqui.com/santamassa" target="_blank" style="color:var(--gold);font-size:1.5rem;" data-i18n="nav-pedir">🛒 Pedir Online</a>
+  <div style="display:flex;border:1px solid rgba(201,168,76,0.35);overflow:hidden;margin-top:0.5rem">
+    <button class="lang-btn active" id="mob-btn-pt" onclick="setLang('pt');toggleMenu()">PT</button>
+    <div style="width:1px;background:rgba(201,168,76,0.35)"></div>
+    <button class="lang-btn" id="mob-btn-en" onclick="setLang('en');toggleMenu()">EN</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow" data-i18n="hero-eyebrow">Desde 1998 · Mirassol & São José do Rio Preto</p>
+  <h1 class="hero-title">Santa <em>Massa</em></h1>
+  <p class="hero-subtitle" data-i18n="hero-subtitle">Tradição italiana, sabor genuíno e hospitalidade que transforma cada refeição em uma experiência inesquecível.</p>
+  <div class="hero-buttons">
+    <a href="#reservas" class="btn-primary" data-i18n="hero-btn-reserva">Fazer Reserva</a>
+    <a href="#cardapio" class="btn-secondary" data-i18n="hero-btn-cardapio">Ver Cardápio</a>
+    <a href="https://pediraqui.com/santamassa" target="_blank" class="btn-pedir-hero" data-i18n="nav-pedir">🛒 Pedir Online</a>
+  </div>
+  <div class="hero-divider">
+    <span data-i18n="hero-divider">Nossas Unidades</span>
+  </div>
+  <div class="units-strip">
+    <a href="#unidades" class="unit-tab">
+      <div class="unit-tab-name">Santa Massa Pizzaria</div>
+      <div class="unit-tab-city">Mirassol</div>
+    </a>
+    <a href="#unidades" class="unit-tab">
+      <div class="unit-tab-name" data-i18n="unit-restaurante">Santa Massa Restaurante</div>
+      <div class="unit-tab-city">Mirassol</div>
+    </a>
+    <a href="#unidades" class="unit-tab">
+      <div class="unit-tab-name">Santa Massa</div>
+      <div class="unit-tab-city">Rio Preto</div>
+    </a>
+  </div>
+</section>
+
+<!-- HISTÓRIA -->
+<section id="historia">
+  <div class="container">
+    <div class="historia-grid">
+      <div class="historia-visual reveal">
+        <div class="historia-year">1998</div>
+        <p class="historia-quote" data-i18n="historia-quote">
+          Uma cozinha, uma família e a paixão por transformar ingredientes simples em momentos extraordinários.
+        </p>
+      </div>
+      <div class="reveal">
+        <p class="section-label" data-i18n="historia-label">Nossa História</p>
+        <h2 class="section-title" data-i18n="historia-title">Uma <em>tradição</em> que nasceu à mesa</h2>
+        <p class="section-body" data-i18n="historia-body1">
+          O grupo Santa Massa nasceu com um propósito claro: levar à mesa de cada cliente o melhor da culinária italiana com o acolhimento genuíno do interior paulista. O que começou como um sonho de família tornou-se um dos grupos de restaurantes mais queridos da região.
+        </p>
+        <p class="section-body" style="margin-top: 1rem;" data-i18n="historia-body2">
+          Com unidades em Mirassol e São José do Rio Preto, mantemos a mesma essência de sempre: ingredientes selecionados, receitas cuidadosas e um atendimento que faz você se sentir em casa.
+        </p>
+        <div class="ornament"><span class="ornament-icon">✦</span></div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-year">1998</span>
+            <span class="timeline-desc" data-i18n="timeline-1998">Fundação da primeira unidade Santa Massa em Mirassol, com foco em massas artesanais e pizzas ao forno a lenha.</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-year">2005</span>
+            <span class="timeline-desc" data-i18n="timeline-2005">Expansão com o Santa Massa Restaurante, ampliando o cardápio para almoços e experiências completas de gastronomia italiana.</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-year">2015</span>
+            <span class="timeline-desc" data-i18n="timeline-2015">Abertura da unidade em São José do Rio Preto, levando a tradição Santa Massa para a maior cidade da região.</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-year" data-i18n="timeline-hoje-label">Hoje</span>
+            <span class="timeline-desc" data-i18n="timeline-hoje">Três unidades, mais de 25 anos de história e milhares de famílias que escolhem o Santa Massa para suas memórias mais especiais.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIDADES -->
+<section id="unidades">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label" data-i18n="unidades-label">Onde nos encontrar</p>
+      <h2 class="section-title" data-i18n="unidades-title">Nossas <em>Unidades</em></h2>
+    </div>
+    <div class="unidades-grid reveal">
+
+      <!-- Pizzaria Mirassol -->
+      <div class="unidade-card">
+        <div class="unidade-num">01</div>
+        <h3 class="unidade-nome">Santa Massa Pizzaria</h3>
+        <p class="unidade-cidade">Mirassol · SP</p>
+        <p class="unidade-desc" data-i18n="unidade-pizzaria-desc">
+          A casa das pizzas artesanais e massas tradicionais. Um ambiente aconchegante para jantares em família ou entre amigos, com o sabor autêntico que consagrou o grupo.
+        </p>
+        <div class="unidade-info">
+          <div class="unidade-info-item"><span class="unidade-info-icon">◎</span> Rua [Endereço], Mirassol — SP</div>
+          <div class="unidade-info-item"><span class="unidade-info-icon">◷</span> <span data-i18n="horario-pizzaria">Ter–Dom: 18h às 23h</span></div>
+          <div class="unidade-info-item"><span class="unidade-info-icon">☎</span> (17) 99191-5095</div>
+        </div>
+        <div class="unidade-actions">
+          <button class="unidade-btn unidade-btn-gold" onclick="selectUnidade('pizzaria-mirassol')" data-i18n="btn-reservar">Reservar Mesa</button>
+          <button class="unidade-btn unidade-btn-outline" onclick="showCardapio('pizzaria')" data-i18n="btn-cardapio">Ver Cardápio</button>
+        </div>
+      </div>
+
+      <!-- Restaurante Mirassol -->
+      <div class="unidade-card">
+        <div class="unidade-num">02</div>
+        <h3 class="unidade-nome" data-i18n="unit-restaurante">Santa Massa Restaurante</h3>
+        <p class="unidade-cidade">Mirassol · SP</p>
+        <p class="unidade-desc" data-i18n="unidade-restaurante-desc">
+          O destino perfeito para o almoço. Buffet completo com pratos quentes, saladas frescas e sobremesas artesanais. Culinária italiana com o charme do dia a dia.
+        </p>
+        <div class="unidade-info">
+          <div class="unidade-info-item"><span class="unidade-info-icon">◎</span> Rua [Endereço], Mirassol — SP</div>
+          <div class="unidade-info-item"><span class="unidade-info-icon">◷</span> <span data-i18n="horario-restaurante">Seg–Sex: 11h às 15h · Sáb–Dom: 11h às 16h</span></div>
+          <div class="unidade-info-item"><span class="unidade-info-icon">☎</span> (17) 99191-5095</div>
+        </div>
+        <div class="unidade-actions">
+          <button class="unidade-btn unidade-btn-gold" onclick="selectUnidade('restaurante-mirassol')" data-i18n="btn-reservar">Reservar Mesa</button>
+          <button class="unidade-btn unidade-btn-outline" onclick="showCardapio('restaurante')" data-i18n="btn-cardapio">Ver Cardápio</button>
+        </div>
+      </div>
+
+      <!-- Rio Preto -->
+      <div class="unidade-card">
+        <div class="unidade-num">03</div>
+        <h3 class="unidade-nome">Santa Massa</h3>
+        <p class="unidade-cidade">São José do Rio Preto · SP</p>
+        <p class="unidade-desc" data-i18n="unidade-riopreto-desc">
+          A mais recente e moderna unidade do grupo. Pizzas, massas e pratos especiais em um espaço sofisticado no coração de Rio Preto, para todas as ocasiões.
+        </p>
+        <div class="unidade-info">
+          <div class="unidade-info-item"><span class="unidade-info-icon">◎</span> Rua [Endereço], Rio Preto — SP</div>
+          <div class="unidade-info-item"><span class="unidade-info-icon">◷</span> <span data-i18n="horario-riopreto">Ter–Dom: 18h às 23h</span></div>
+          <div class="unidade-info-item"><span class="unidade-info-icon">☎</span> (17) 3200-0003</div>
+        </div>
+        <div class="unidade-actions">
+          <button class="unidade-btn unidade-btn-gold" onclick="selectUnidade('riopreto')" data-i18n="btn-reservar">Reservar Mesa</button>
+          <button class="unidade-btn unidade-btn-outline" onclick="showCardapio('riopreto')" data-i18n="btn-cardapio">Ver Cardápio</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARDÁPIO -->
+<section id="cardapio">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label" data-i18n="cardapio-label">O que servimos</p>
+      <h2 class="section-title" data-i18n="cardapio-title">Nosso <em>Cardápio</em></h2>
+      <p class="section-body" data-i18n="cardapio-body">Ingredientes selecionados, receitas com alma. Cada prato conta uma história.</p>
+    </div>
+
+    <div class="cardapio-tabs reveal">
+      <button class="cardapio-tab active" onclick="switchTab('pizzaria')" data-i18n="tab-pizzaria">Pizzaria · Mirassol</button>
+      <button class="cardapio-tab" onclick="switchTab('restaurante')" data-i18n="tab-restaurante">Restaurante · Mirassol</button>
+      <button class="cardapio-tab" onclick="switchTab('riopreto')" data-i18n="tab-riopreto">Rio Preto</button>
+    </div>
+
+    <!-- PIZZARIA -->
+    <div class="cardapio-panel active" id="tab-pizzaria">
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Pizzas Tradicionais</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Margherita</div><div class="cardapio-item-desc">Molho de tomate artesanal, mussarela fior di latte e manjericão fresco</div><div class="cardapio-item-price">R$ 52,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Calabresa</div><div class="cardapio-item-desc">Molho de tomate, calabresa artesanal, cebola roxa e azeitonas</div><div class="cardapio-item-price">R$ 55,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Portuguesa</div><div class="cardapio-item-desc">Presunto, ovos, cebola, azeitonas, pimentão e mussarela</div><div class="cardapio-item-price">R$ 58,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Frango com Catupiry</div><div class="cardapio-item-desc">Frango desfiado temperado, catupiry original e milho verde</div><div class="cardapio-item-price">R$ 58,00</div></div>
+        </div>
+      </div>
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Pizzas Especiais</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa</div><div class="cardapio-item-desc">Combinação exclusiva da casa: quatro queijos, rúcula e presunto de parma</div><div class="cardapio-item-price">R$ 72,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Salmão com Alcaparras</div><div class="cardapio-item-desc">Cream cheese, salmão defumado, alcaparras e dill fresco</div><div class="cardapio-item-price">R$ 78,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Trufada</div><div class="cardapio-item-desc">Mussarela, cogumelos funghi, azeite trufado e parmesão</div><div class="cardapio-item-price">R$ 82,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Burrata</div><div class="cardapio-item-desc">Tomate cereja assado, burrata fresca, pesto de manjericão e rúcula</div><div class="cardapio-item-price">R$ 85,00</div></div>
+        </div>
+      </div>
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Massas</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Fettuccine ao Bolonhesa</div><div class="cardapio-item-desc">Massa fresca ao ragú de carne bovina com tomates San Marzano</div><div class="cardapio-item-price">R$ 52,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Penne alla Vodka</div><div class="cardapio-item-desc">Molho cremoso de tomate com vodka, presunto e parmesão</div><div class="cardapio-item-price">R$ 48,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Lasanha da Casa</div><div class="cardapio-item-desc">Camadas de massa fresca, bechamel, ragú e mussarela gratinada</div><div class="cardapio-item-price">R$ 56,00</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESTAURANTE -->
+    <div class="cardapio-panel" id="tab-restaurante">
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Buffet de Almoço — Pratos Quentes</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé à Parmegiana</div><div class="cardapio-item-desc">Filé empanado com molho de tomate e mussarela gratinada, acompanha arroz e fritas</div><div class="cardapio-item-price">Buffet livre</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Frango ao Funghi</div><div class="cardapio-item-desc">Peito de frango grelhado ao molho cremoso de cogumelos funghi e ervas</div><div class="cardapio-item-price">Buffet livre</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Massa ao Pesto</div><div class="cardapio-item-desc">Espaguete ao pesto de manjericão com tomate seco e parmesão</div><div class="cardapio-item-price">Buffet livre</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Risoto do Dia</div><div class="cardapio-item-desc">Receita que varia conforme a estação, sempre com ingredientes frescos selecionados</div><div class="cardapio-item-price">Buffet livre</div></div>
+        </div>
+      </div>
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Cardápio à la Carte</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Tilápia Mediterrânea</div><div class="cardapio-item-desc">Filé de tilápia assado com tomates, azeitonas, alcaparras e ervas frescas</div><div class="cardapio-item-price">R$ 58,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Picanha Grelhada</div><div class="cardapio-item-desc">Picanha ao ponto com alho frito, farofa de bacon e arroz com brócolis</div><div class="cardapio-item-price">R$ 72,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Salada Santa Massa</div><div class="cardapio-item-desc">Folhas verdes, tomate seco, nozes, gorgonzola e vinagrete balsâmico</div><div class="cardapio-item-price">R$ 32,00</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIO PRETO -->
+    <div class="cardapio-panel" id="tab-riopreto">
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Entradas</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Tábua de Frios</div><div class="cardapio-item-desc">Mussarela, presunto, azeitona verde e preta, provolone, gorgonzola, alface, tomate, palmito, salame e rúcula</div><div class="cardapio-item-price">Meia R$ 140 · Inteira R$ 160</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Salada Completa</div><div class="cardapio-item-desc">Alface, tomate, palmito, presunto, mussarela, salame, azeitonas verdes</div><div class="cardapio-item-price">Meia R$ 105 · Inteira R$ 135</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Bruschetta</div><div class="cardapio-item-desc">Vinagrete de manjericão no azeite, torrada de pão italiano gratinado com tiras de provolone · 3 torradas</div><div class="cardapio-item-price">R$ 40,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Bruschetta de Parma</div><div class="cardapio-item-desc">Vinagrete de manjericão no azeite, torrada de pão italiano com provolone e presunto parma · 3 torradas</div><div class="cardapio-item-price">R$ 65,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Burrata</div><div class="cardapio-item-desc">Burrata de búfala com pesto de manjericão com nozes, tomate-cereja e torradas de pão italiano</div><div class="cardapio-item-price">R$ 65,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Burrata Santa Massa</div><div class="cardapio-item-desc">Burrata de búfala coberta com massa e assada, pesto de manjericão com nozes e tomate seco com folhas</div><div class="cardapio-item-price">R$ 75,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Corneccione</div><div class="cardapio-item-desc">Crocante massa de pizza artesanal com bordas generosas, acompanhada de azeite aromatizado e ervas frescas · tradicional ou toscano</div><div class="cardapio-item-price">R$ 40,00</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Pratos Sugeridos</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé de Tilápia com Fritas</div><div class="cardapio-item-desc">Tilápia, fritas, torradas ou arroz</div><div class="cardapio-item-price">Meia R$ 115 · Inteira R$ 125</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé à Parmegiana</div><div class="cardapio-item-desc">Filé mignon à milanesa, molho de tomate especial, mussarela e parmesão. Acompanha arroz e fritas</div><div class="cardapio-item-price">Meia R$ 135 · Inteira R$ 175</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé à Cubana</div><div class="cardapio-item-desc">Filé mignon, presunto, mussarela e banana à milanesa, seleta com bacon, pêssego, figo, arroz e batatas fritas</div><div class="cardapio-item-price">Meia R$ 140 · Inteira R$ 200</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé Mignon na Telha</div><div class="cardapio-item-desc">Filé mignon em manta, mandioca cozida, farofa temperada, arroz, salada de alface, tomate e rúcula</div><div class="cardapio-item-price">Meia R$ 140 · Inteira R$ 200</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Nhoque Santa Massa</div><div class="cardapio-item-desc">Nhoque de batata com mussarela, molho especial da casa · Bolonhesa ou molho branco com bacon</div><div class="cardapio-item-price">Meia R$ 115 · Inteira R$ 130</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Macarrão Santa Massa</div><div class="cardapio-item-desc">Talharim com mussarela, molho especial · Ao sugo, Bolonhesa, Molho Branco com Bacon ou Calabresa</div><div class="cardapio-item-price">Meia R$ 120 · Inteira R$ 155</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Camarão ao Molho Branco</div><div class="cardapio-item-desc">Camarão ao cremoso molho branco da casa</div><div class="cardapio-item-price">Meia R$ 150 · Inteira R$ 205</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Molho Quatro Queijos com Filé Mignon</div><div class="cardapio-item-desc">Filé mignon ao cremoso molho quatro queijos</div><div class="cardapio-item-price">Meia R$ 135 · Inteira R$ 180</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Pizzas Especiais da Casa</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Pizza Santa Massa</div><div class="cardapio-item-desc">Mussarela, lombo canadense, filé mignon, cebola, catupiry, alho frito, tomate cereja e azeitonas pretas</div><div class="cardapio-item-price">P R$ 87 · M R$ 97 · G R$ 119</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Pizza Italianíssima</div><div class="cardapio-item-desc">Mussarela, macarrão talharim, molho bolonhesa, calabresa e azeite</div><div class="cardapio-item-price">P R$ 74 · M R$ 84 · G R$ 102</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Pizza Parma</div><div class="cardapio-item-desc">Mussarela, presunto parma, rúcula, azeitona preta e azeite extra virgem</div><div class="cardapio-item-price">P R$ 93 · M R$ 103 · G R$ 123</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Pizza de Pistache</div><div class="cardapio-item-desc">Mussarela, creme de pistache, granulado de pistache e cerejas</div><div class="cardapio-item-price">P R$ 93 · M R$ 103 · G R$ 123</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Do Chefe</div><div class="cardapio-item-desc">Mussarela, filé mignon, tomate seco, catupiry, cebola, parmesão e azeite</div><div class="cardapio-item-price">P R$ 87 · M R$ 97 · G R$ 117</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Nordestina</div><div class="cardapio-item-desc">Mussarela, carne seca, tomate seco, catupiry, cebola, pimenta biquinho e azeite</div><div class="cardapio-item-price">P R$ 82 · M R$ 92 · G R$ 119</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Picanha com Catupiry</div><div class="cardapio-item-desc">Mussarela, picanha grelhada, cebola, cobertura de catupiry e azeite</div><div class="cardapio-item-price">P R$ 87 · M R$ 97 · G R$ 117</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Picanha com Rúcula</div><div class="cardapio-item-desc">Mussarela, picanha grelhada, cebola, rúcula e azeite</div><div class="cardapio-item-price">P R$ 87 · M R$ 97 · G R$ 117</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé Mignon com Rúcula</div><div class="cardapio-item-desc">Filé mignon, mussarela, catupiry, rúcula, alho frito e azeite</div><div class="cardapio-item-price">P R$ 85 · M R$ 97 · G R$ 117</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Camarão</div><div class="cardapio-item-desc">Mussarela, camarão, catupiry e azeite</div><div class="cardapio-item-price">P R$ 108 · M R$ 128 · G R$ 158</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Strogonoff de Carne</div><div class="cardapio-item-desc">Mussarela, strogonoff de carne, batata palha e azeite</div><div class="cardapio-item-price">P R$ 84 · M R$ 94 · G R$ 112</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">A Minha Moda</div><div class="cardapio-item-desc">Escolha 5 ingredientes de sua preferência e faremos sua pizza</div><div class="cardapio-item-price">P R$ 82 · M R$ 92 · G R$ 117</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Pizzas Doces</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Brigadeiro</div><div class="cardapio-item-desc">Mussarela, leite condensado, brigadeiro, granulado e cerejas</div><div class="cardapio-item-price">P R$ 62 · M R$ 72 · G R$ 82</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Chocolatelo</div><div class="cardapio-item-desc">Mussarela, chocolate ralado, sorvete de creme e cerejas · branco ou escuro</div><div class="cardapio-item-price">P R$ 67 · M R$ 77 · G R$ 87</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Pizza de Pistache</div><div class="cardapio-item-desc">Mussarela, creme de pistache, granulado de pistache e cerejas</div><div class="cardapio-item-price">P R$ 93 · M R$ 103 · G R$ 123</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Romeu e Julieta</div><div class="cardapio-item-desc">Mussarela, goiabada, leite condensado e cereja</div><div class="cardapio-item-price">P R$ 62 · M R$ 72 · G R$ 82</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Sensação</div><div class="cardapio-item-desc">Mussarela, leite condensado, chocolate em pasta, granulado, creme de morango e cereja</div><div class="cardapio-item-price">P R$ 67 · M R$ 77 · G R$ 87</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Santa Crunch</div><div class="cardapio-item-desc">Mussarela, doce de leite cozido, amendoim e cerejas</div><div class="cardapio-item-price">P R$ 64 · M R$ 74 · G R$ 92</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Massas</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Lasanha Santa Massa</div><div class="cardapio-item-desc">Massa de lasanha, presunto, mussarela, molho especial · ao sugo, bolonhesa ou molho branco com bacon</div><div class="cardapio-item-price">Meia R$ 110 · Inteira R$ 140</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Panqueca à Bolonhesa</div><div class="cardapio-item-desc">Molho bolonhesa especial, recheio de carne moída, gratinada com mussarela, acompanha arroz</div><div class="cardapio-item-price">Meia R$ 90 · Inteira R$ 110</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Panqueca ao Molho Branco</div><div class="cardapio-item-desc">Molho branco especial, recheio de frango com catupiry, gratinada com mussarela, acompanha arroz</div><div class="cardapio-item-price">Meia R$ 90 · Inteira R$ 110</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Macarrão Individual</div><div class="cardapio-item-desc">Porção individual de macarrão com molho à escolha</div><div class="cardapio-item-price">R$ 70,00</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">À La Carte</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Prato Executivo</div><div class="cardapio-item-desc">Arroz, batata frita, salada · opção de Parmegiana de carne ou frango / filé mignon grelhado / filé de frango</div><div class="cardapio-item-price">R$ 70,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Prato Kids</div><div class="cardapio-item-desc">Arroz, feijão, batata e um grelhado à escolha: carne, frango ou peixe</div><div class="cardapio-item-price">R$ 35,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé à Guanabara</div><div class="cardapio-item-desc">Filé mignon ao molho madeira, palmito, tomate, presunto, mussarela, parmesão e ervilhas, acompanha arroz</div><div class="cardapio-item-price">Meia R$ 135 · Inteira R$ 175</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé à Primavera</div><div class="cardapio-item-desc">Macarrão penne ao alho e óleo, filé mignon grelhado e legumes</div><div class="cardapio-item-price">Meia R$ 135 · Inteira R$ 170</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé à Moda da Casa</div><div class="cardapio-item-desc">Filé mignon grelhado, banana e mussarela à milanesa, legumes, figo, pêssego, farofa, arroz e fritas</div><div class="cardapio-item-price">Meia R$ 140 · Inteira R$ 200</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Filé com Fritas</div><div class="cardapio-item-desc">Filé mignon grelhado acompanhado de batatas fritas</div><div class="cardapio-item-price">Meia R$ 115 · Inteira R$ 150</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Sobremesas</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Petit Gateau</div><div class="cardapio-item-desc">Bolo recheado com calda de chocolate, acompanhado de sorvete de creme</div><div class="cardapio-item-price">R$ 20,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Brownie com Sorvete</div><div class="cardapio-item-desc">Brownie de chocolate acompanhado de sorvete de creme</div><div class="cardapio-item-price">R$ 20,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Pudim</div><div class="cardapio-item-desc">Pudim de leite condensado clássico</div><div class="cardapio-item-price">R$ 15,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Sobremesa Santa Massa</div><div class="cardapio-item-desc">Massa crocante em cubos, regada com doce de leite e chocolate, acompanhada de castanha</div><div class="cardapio-item-price">R$ 48,00</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Bordas Recheadas</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Presunto · Cheddar · Banana</div><div class="cardapio-item-desc">Bordas simples</div><div class="cardapio-item-price">R$ 28,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Mussarela · Catupiry · Calabresa · Goiaba</div><div class="cardapio-item-desc">Bordas clássicas</div><div class="cardapio-item-price">R$ 30,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Frango Catupiry · Frango Cheddar · Presunto e Mussarela · Bacon · Atum</div><div class="cardapio-item-desc">Bordas especiais</div><div class="cardapio-item-price">R$ 36,00</div></div>
+        </div>
+      </div>
+
+      <div class="cardapio-category">
+        <h3 class="cardapio-category-title">Bebidas</h3>
+        <div class="cardapio-grid">
+          <div class="cardapio-item"><div class="cardapio-item-name">Refrigerantes Lata</div><div class="cardapio-item-desc">Coca-Cola, Coca Zero, Guaraná Antárctica, Guaraná Zero, Fanta, Sprite, Sprite Zero, Pepsi, Pepsi Black · 350ml</div><div class="cardapio-item-price">R$ 9,50</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Água / H2O / Limoneto</div><div class="cardapio-item-desc">Água sem gás 500ml R$ 6,50 · Água com gás 500ml R$ 6,50 · H2O 500ml R$ 9,50 · Limoneto 500ml R$ 9,50</div><div class="cardapio-item-price">a partir de R$ 6,50</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Sucos Naturais</div><div class="cardapio-item-desc">Abacaxi, Laranja, Morango, Maracujá, Limão e outros</div><div class="cardapio-item-price">Copo R$ 15 · Jarra R$ 23</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Cervejas</div><div class="cardapio-item-desc">Long Neck: Heineken R$ 13, Stella Artois R$ 13, Heineken 0.0 R$ 11, Malzebier R$ 9 · 600ml: Skol R$ 15, Original/Spaten R$ 17, Heineken R$ 21</div><div class="cardapio-item-price">a partir de R$ 9,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Chopp Antarctica</div><div class="cardapio-item-desc">Tulipa R$ 10 · Caneca R$ 16</div><div class="cardapio-item-price">R$ 10,00 – R$ 16,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Drinks & Caipirinhas</div><div class="cardapio-item-desc">Aperol Spritz R$ 35 · Frozen (tequila) R$ 28 · Caipirinha de pinga R$ 21 · Vodka R$ 24 · Smirnoff/Saquê R$ 27</div><div class="cardapio-item-price">a partir de R$ 21,00</div></div>
+          <div class="cardapio-item"><div class="cardapio-item-name">Carta de Vinhos</div><div class="cardapio-item-desc">Tintos, brancos e espumantes das vinícolas Catena, Casa Perini, portugueses e mais. Taça a partir de R$ 35</div><div class="cardapio-item-price">a partir de R$ 35,00</div></div>
+        </div>
+      </div>
+
+      <p style="font-size:0.78rem;color:var(--text-muted);margin-top:1rem;">* Embalagem para viagem R$ 3,00 · P = Pequena · M = Média · G = Grande · Meia porção serve 2 pessoas, inteira serve 4</p>
+    </div>
+
+    <!-- PIZZARIA EN -->
+    <div class="cardapio-panel" id="tab-pizzaria-en" style="display:none">
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Traditional Pizzas</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Margherita</div><div class="cardapio-item-desc">House-made tomato sauce, fior di latte mozzarella and fresh basil</div><div class="cardapio-item-price">R$ 52.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Sausage &amp; Onion</div><div class="cardapio-item-desc">Tomato sauce, artisan pork sausage, red onion and olives</div><div class="cardapio-item-price">R$ 55.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Portuguese-Style</div><div class="cardapio-item-desc">Ham, eggs, onion, olives, bell pepper and mozzarella</div><div class="cardapio-item-price">R$ 58.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Chicken &amp; Catupiry</div><div class="cardapio-item-desc">Seasoned shredded chicken, catupiry cream cheese and sweet corn</div><div class="cardapio-item-price">R$ 58.00</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Special Pizzas</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa</div><div class="cardapio-item-desc">House exclusive: four cheeses, arugula and Parma ham</div><div class="cardapio-item-price">R$ 72.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Salmon &amp; Capers</div><div class="cardapio-item-desc">Cream cheese, smoked salmon, capers and fresh dill</div><div class="cardapio-item-price">R$ 78.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Truffle</div><div class="cardapio-item-desc">Mozzarella, porcini mushrooms, truffle oil and Parmesan</div><div class="cardapio-item-price">R$ 82.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Burrata</div><div class="cardapio-item-desc">Roasted cherry tomatoes, fresh burrata, basil pesto and arugula</div><div class="cardapio-item-price">R$ 85.00</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Pasta Dishes</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Fettuccine Bolognese</div><div class="cardapio-item-desc">Fresh pasta with slow-cooked beef ragù and San Marzano tomatoes</div><div class="cardapio-item-price">R$ 52.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Penne alla Vodka</div><div class="cardapio-item-desc">Creamy tomato sauce with vodka, ham and Parmesan</div><div class="cardapio-item-price">R$ 48.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">House Lasagne</div><div class="cardapio-item-desc">Layers of fresh pasta, béchamel, ragù and gratinated mozzarella</div><div class="cardapio-item-price">R$ 56.00</div></div>
+      </div></div>
+    </div>
+
+    <!-- RESTAURANTE EN -->
+    <div class="cardapio-panel" id="tab-restaurante-en" style="display:none">
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Lunch Buffet — Hot Dishes</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Chicken/Beef Parmigiana</div><div class="cardapio-item-desc">Breaded fillet with house tomato sauce and gratinated mozzarella, served with rice and fries</div><div class="cardapio-item-price">All-inclusive buffet</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Chicken in Mushroom Sauce</div><div class="cardapio-item-desc">Grilled chicken breast in a creamy porcini mushroom and herb sauce</div><div class="cardapio-item-price">All-inclusive buffet</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Pasta al Pesto</div><div class="cardapio-item-desc">Spaghetti with basil pesto, sun-dried tomatoes and Parmesan</div><div class="cardapio-item-price">All-inclusive buffet</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Risotto of the Day</div><div class="cardapio-item-desc">Recipe varies with the season, always made with fresh selected ingredients</div><div class="cardapio-item-price">All-inclusive buffet</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">À la Carte</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Mediterranean Tilapia</div><div class="cardapio-item-desc">Baked tilapia fillet with tomatoes, olives, capers and fresh herbs</div><div class="cardapio-item-price">R$ 58.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Grilled Picanha Steak</div><div class="cardapio-item-desc">Picanha steak with fried garlic, bacon farofa and rice with broccoli</div><div class="cardapio-item-price">R$ 72.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa Salad</div><div class="cardapio-item-desc">Mixed greens, sun-dried tomato, walnuts, gorgonzola and balsamic vinaigrette</div><div class="cardapio-item-price">R$ 32.00</div></div>
+      </div></div>
+    </div>
+
+    <!-- RIO PRETO EN -->
+    <div class="cardapio-panel" id="tab-riopreto-en" style="display:none">
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Starters</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Charcuterie Board</div><div class="cardapio-item-desc">Mozzarella, ham, green olive, black olive, provolone, gorgonzola, lettuce, tomato, heart of palm, salami and arugula</div><div class="cardapio-item-price">Half R$ 140 · Full R$ 160</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Full Salad</div><div class="cardapio-item-desc">Lettuce, tomato, heart of palm, ham, mozzarella, salami, green olives</div><div class="cardapio-item-price">Half R$ 105 · Full R$ 135</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Bruschetta</div><div class="cardapio-item-desc">Basil vinaigrette in olive oil, oven-grilled Italian toast with provolone strips · 3 toasts</div><div class="cardapio-item-price">R$ 40.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Parma Bruschetta</div><div class="cardapio-item-desc">Basil vinaigrette in olive oil, oven-grilled Italian toast, provolone strips and Parma ham · 3 toasts</div><div class="cardapio-item-price">R$ 65.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Burrata</div><div class="cardapio-item-desc">Buffalo burrata with walnut basil pesto, cherry tomatoes and Italian bread toasts</div><div class="cardapio-item-price">R$ 65.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa Burrata</div><div class="cardapio-item-desc">Buffalo burrata wrapped in dough and baked, walnut basil pesto, sun-dried tomatoes and greens</div><div class="cardapio-item-price">R$ 75.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Corneccione (traditional or Tuscan)</div><div class="cardapio-item-desc">Crispy artisan pizza dough with generous crust, flavoured olive oil and a selection of fresh herbs</div><div class="cardapio-item-price">R$ 40.00</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Chef's Suggestions</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Tilapia Fillet with Fries</div><div class="cardapio-item-desc">Tilapia, fries, toasts or rice</div><div class="cardapio-item-price">Half R$ 115 · Full R$ 125</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Chicken/Beef Parmigiana</div><div class="cardapio-item-desc">Breaded fillet mignon with house special tomato sauce, topped with mozzarella and Parmesan. Served with rice and fries</div><div class="cardapio-item-price">Half R$ 135 · Full R$ 175</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Cuban-Style Fillet</div><div class="cardapio-item-desc">Fillet mignon, ham, mozzarella and breaded banana, mixed vegetables with bacon, peach, fig, rice and fries</div><div class="cardapio-item-price">Half R$ 140 · Full R$ 200</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Fillet Mignon on a Tile</div><div class="cardapio-item-desc">Flat fillet mignon, boiled cassava, seasoned farofa, rice, lettuce, tomato and arugula salad</div><div class="cardapio-item-price">Half R$ 140 · Full R$ 200</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa Gnocchi</div><div class="cardapio-item-desc">Potato gnocchi with mozzarella and house special sauce; options: Bolognese or white sauce with bacon</div><div class="cardapio-item-price">Half R$ 115 · Full R$ 130</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa Pasta (topped)</div><div class="cardapio-item-desc">Tagliatelle pasta with mozzarella and house special sauce. Options: Tomato, Bolognese, White Sauce with Bacon, Sausage</div><div class="cardapio-item-price">Half R$ 120 · Full R$ 155</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Shrimp in White Sauce</div><div class="cardapio-item-desc">Shrimp in the house creamy white sauce</div><div class="cardapio-item-price">Half R$ 150 · Full R$ 205</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Four-Cheese Sauce with Fillet Mignon</div><div class="cardapio-item-desc">Fillet mignon in a creamy four-cheese sauce</div><div class="cardapio-item-price">Half R$ 135 · Full R$ 180</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">House Special Pizzas</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa Pizza</div><div class="cardapio-item-desc">Mozzarella, Canadian bacon, fillet mignon, onion, catupiry cream cheese, fried garlic, cherry tomatoes and black olives</div><div class="cardapio-item-price">S R$ 87 · M R$ 97 · L R$ 119</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Italianíssima Pizza</div><div class="cardapio-item-desc">Mozzarella, tagliatelle pasta, Bolognese sauce, chorizo sausage and olive oil</div><div class="cardapio-item-price">S R$ 74 · M R$ 84 · L R$ 102</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Parma Pizza</div><div class="cardapio-item-desc">Mozzarella, Parma ham, arugula, black olives and extra-virgin olive oil</div><div class="cardapio-item-price">S R$ 93 · M R$ 103 · L R$ 123</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Pistachio Pizza</div><div class="cardapio-item-desc">Mozzarella, pistachio cream, pistachio crumble and cherries</div><div class="cardapio-item-price">S R$ 93 · M R$ 103 · L R$ 123</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Chef's Special</div><div class="cardapio-item-desc">Mozzarella, fillet mignon, sun-dried tomato, catupiry cream cheese, onion, Parmesan and EVOO</div><div class="cardapio-item-price">S R$ 87 · M R$ 97 · L R$ 117</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Northeastern-Style</div><div class="cardapio-item-desc">Mozzarella, jerked beef, sun-dried tomato, catupiry cream cheese, onion, pickled pepper and EVOO</div><div class="cardapio-item-price">S R$ 82 · M R$ 92 · L R$ 119</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Picanha &amp; Catupiry</div><div class="cardapio-item-desc">Mozzarella, grilled picanha steak, onion, catupiry cream cheese topping and EVOO</div><div class="cardapio-item-price">S R$ 87 · M R$ 97 · L R$ 117</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Shrimp Pizza</div><div class="cardapio-item-desc">Mozzarella, shrimp, catupiry cream cheese and EVOO</div><div class="cardapio-item-price">S R$ 108 · M R$ 128 · L R$ 158</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Beef Stroganoff Pizza</div><div class="cardapio-item-desc">Mozzarella, beef stroganoff, shoestring potato crisps and EVOO</div><div class="cardapio-item-price">S R$ 84 · M R$ 94 · L R$ 112</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Build Your Own</div><div class="cardapio-item-desc">Choose 5 ingredients of your choice and we will make your pizza</div><div class="cardapio-item-price">S R$ 82 · M R$ 92 · L R$ 117</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Sweet Pizzas</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Brigadeiro</div><div class="cardapio-item-desc">Mozzarella, condensed milk, brigadeiro chocolate truffle, sprinkles and cherries</div><div class="cardapio-item-price">S R$ 62 · M R$ 72 · L R$ 82</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Chocolate Pizza (white or dark)</div><div class="cardapio-item-desc">Mozzarella, grated chocolate, vanilla ice cream and cherries</div><div class="cardapio-item-price">S R$ 67 · M R$ 77 · L R$ 87</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Romeo &amp; Juliet</div><div class="cardapio-item-desc">Mozzarella, guava paste, condensed milk and cherry</div><div class="cardapio-item-price">S R$ 62 · M R$ 72 · L R$ 82</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Crunch</div><div class="cardapio-item-desc">Mozzarella, cooked dulce de leche, peanuts and cherries</div><div class="cardapio-item-price">S R$ 64 · M R$ 74 · L R$ 92</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Pasta Dishes</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa Lasagne</div><div class="cardapio-item-desc">Lasagne sheets, ham, mozzarella, house special sauce; options: tomato, Bolognese or white sauce with bacon</div><div class="cardapio-item-price">Half R$ 110 · Full R$ 140</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Pancake – Bolognese</div><div class="cardapio-item-desc">House Bolognese sauce, ground beef filling, gratinated with mozzarella (served with rice)</div><div class="cardapio-item-price">Half R$ 90 · Full R$ 110</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Pancake – White Sauce</div><div class="cardapio-item-desc">House white sauce, chicken &amp; catupiry cream cheese filling, gratinated with mozzarella (served with rice)</div><div class="cardapio-item-price">Half R$ 90 · Full R$ 110</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Individual Pasta</div><div class="cardapio-item-desc">Single-serve pasta with your choice of sauce</div><div class="cardapio-item-price">R$ 70.00</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">À la Carte</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Executive Plate</div><div class="cardapio-item-desc">Rice, fries, salad with choice of protein: meat or chicken Parmigiana / grilled fillet mignon / grilled chicken fillet</div><div class="cardapio-item-price">R$ 70.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Kids Plate</div><div class="cardapio-item-desc">Rice, beans, potato and a grilled item with option: beef, chicken or fish</div><div class="cardapio-item-price">R$ 35.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Guanabara Fillet</div><div class="cardapio-item-desc">Grilled fillet mignon with Madeira sauce, heart of palm, tomato, ham, mozzarella, Parmesan and peas, served with rice</div><div class="cardapio-item-price">Half R$ 135 · Full R$ 175</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Spring Fillet</div><div class="cardapio-item-desc">Penne pasta with garlic and oil, grilled fillet mignon and vegetables</div><div class="cardapio-item-price">Half R$ 135 · Full R$ 170</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">House-Style Fillet</div><div class="cardapio-item-desc">Grilled fillet mignon, breaded banana and mozzarella, vegetables, fig, peach, farofa, rice and fries</div><div class="cardapio-item-price">Half R$ 140 · Full R$ 200</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Fillet with Fries</div><div class="cardapio-item-desc">Grilled fillet mignon served with fries</div><div class="cardapio-item-price">Half R$ 115 · Full R$ 150</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Desserts</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Petit Gateau</div><div class="cardapio-item-desc">Molten chocolate cake served with vanilla ice cream</div><div class="cardapio-item-price">R$ 20.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Brownie with Ice Cream</div><div class="cardapio-item-desc">Chocolate brownie served with vanilla ice cream</div><div class="cardapio-item-price">R$ 20.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Crème Caramel</div><div class="cardapio-item-desc">Classic condensed milk crème caramel</div><div class="cardapio-item-price">R$ 15.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Santa Massa Dessert</div><div class="cardapio-item-desc">Crispy dough cubes drizzled with dulce de leche and chocolate, served with nuts</div><div class="cardapio-item-price">R$ 48.00</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Stuffed Crusts</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Ham · Cheddar · Banana</div><div class="cardapio-item-desc">Simple stuffed crusts</div><div class="cardapio-item-price">R$ 28.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Mozzarella · Catupiry · Sausage · Guava</div><div class="cardapio-item-desc">Classic stuffed crusts</div><div class="cardapio-item-price">R$ 30.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Chicken &amp; Catupiry · Chicken &amp; Cheddar · Ham &amp; Mozzarella · Bacon · Tuna</div><div class="cardapio-item-desc">Premium stuffed crusts</div><div class="cardapio-item-price">R$ 36.00</div></div>
+      </div></div>
+      <div class="cardapio-category"><h3 class="cardapio-category-title">Drinks</h3><div class="cardapio-grid">
+        <div class="cardapio-item"><div class="cardapio-item-name">Canned Soft Drinks 350ml</div><div class="cardapio-item-desc">Coca-Cola, Coca-Cola Zero, Guaraná, Fanta, Sprite, Pepsi and others</div><div class="cardapio-item-price">R$ 9.50</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Fresh Juices</div><div class="cardapio-item-desc">Pineapple, orange, strawberry, passion fruit, lemon and others</div><div class="cardapio-item-price">Glass R$ 15 · Jug R$ 23</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Beers</div><div class="cardapio-item-desc">Long-neck: Heineken R$ 13 · Stella R$ 13 · 600ml: Skol R$ 15 · Original R$ 17 · Heineken R$ 21</div><div class="cardapio-item-price">from R$ 9.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Draught Beer (Antarctica)</div><div class="cardapio-item-desc">Small glass R$ 10 · Large mug R$ 16</div><div class="cardapio-item-price">R$ 10.00 – R$ 16.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Cocktails &amp; Caipirinhas</div><div class="cardapio-item-desc">Aperol Spritz R$ 35 · Cachaça Caipirinha R$ 21 · Vodka R$ 24 · Frozen Margarita R$ 28</div><div class="cardapio-item-price">from R$ 21.00</div></div>
+        <div class="cardapio-item"><div class="cardapio-item-name">Wine List</div><div class="cardapio-item-desc">Reds, whites and sparkling wines. Glass from R$ 35</div><div class="cardapio-item-price">from R$ 35.00</div></div>
+      </div></div>
+      <p style="font-size:0.78rem;color:var(--text-muted);margin-top:1rem;">* S = Small · M = Medium · L = Large · Half portion serves 2, full portion serves 4 · Takeaway packaging R$ 3.00</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESERVAS -->
+<section id="reservas">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label" data-i18n="res-label">Reserve sua experiência</p>
+      <h2 class="section-title" data-i18n="res-title">Faça sua <em>Reserva</em></h2>
+      <p class="section-body" style="margin: 0 auto;" data-i18n="res-body">Preencha os dados abaixo e você será redirecionado para o WhatsApp da unidade escolhida para confirmar sua reserva.</p>
+    </div>
+
+    <div class="reserva-container reveal">
+      <p class="reserva-form-title" data-i18n="res-form-title">Informações para Reserva</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl-nome">Seu nome</label>
+          <input type="text" class="form-input" id="res-nome" placeholder="Nome completo" data-i18n-ph="ph-nome">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl-tel">Telefone / WhatsApp</label>
+          <input type="tel" class="form-input" id="res-telefone" placeholder="(17) 99191-5095">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl-unidade">Unidade</label>
+          <select class="form-select" id="res-unidade" onchange="onUnidadeChange()">
+            <option value="" data-i18n="opt-unidade">Selecione a unidade</option>
+            <option value="pizzaria-mirassol">Santa Massa Pizzaria — Mirassol</option>
+            <option value="restaurante-mirassol">Santa Massa Restaurante — Mirassol</option>
+            <option value="riopreto">Santa Massa — Rio Preto</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl-pessoas">Número de pessoas</label>
+          <input type="number" class="form-input" id="res-pessoas" min="1" max="200" placeholder="Ex: 4" oninput="onPessoasChange()">
+          <div id="riopreto-aviso" style="display:none;margin-top:0.4rem;font-size:0.75rem;color:#e87070;line-height:1.5;">
+            <span data-i18n="aviso-riopreto">⚠ Sextas e sábados a unidade de Rio Preto aceita no máximo 16 pessoas.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl-data">Data desejada</label>
+          <input type="date" class="form-input" id="res-data" onchange="onDataChange()">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl-horario">Horário de chegada</label>
+          <select class="form-select" id="res-horario">
+            <option value="" data-i18n="opt-horario">Selecione o horário</option>
+            <optgroup label="Almoço">
+              <option value="11:00">11h00</option>
+              <option value="11:30">11h30</option>
+              <option value="12:00">12h00</option>
+              <option value="12:30">12h30</option>
+              <option value="13:00">13h00</option>
+              <option value="13:30">13h30</option>
+              <option value="14:00">14h00</option>
+              <option value="14:30">14h30</option>
+            </optgroup>
+            <optgroup label="Jantar">
+              <option value="18:00">18h00</option>
+              <option value="18:30">18h30</option>
+              <option value="19:00">19h00</option>
+              <option value="19:30">19h30</option>
+            </optgroup>
+          </select>
+          <div style="font-size:0.74rem;color:var(--text-muted);margin-top:0.35rem;line-height:1.5;" data-i18n="horario-info">⏰ As reservas são mantidas até as 19h30 — este é o horário limite de chegada.</div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl-obs">Observações (opcional)</label>
+          <textarea class="form-textarea" id="res-obs" placeholder="Alergias, ocasião especial, preferências de mesa..." data-i18n-ph="ph-obs"></textarea>
+        </div>
+      </div>
+
+      <button class="btn-whatsapp" onclick="enviarReserva()">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M11.999 2C6.477 2 2 6.484 2 12.017c0 1.99.52 3.859 1.429 5.48L2 22l4.637-1.217A9.956 9.956 0 0012 22.034c5.522 0 9.999-4.484 9.999-10.017 0-5.532-4.477-10.017-10-10.017zm.001 18.344a8.258 8.258 0 01-4.208-1.147l-.301-.18-3.12.818.832-3.035-.196-.311A8.271 8.271 0 013.727 12.01c0-4.557 3.716-8.27 8.274-8.27 4.558 0 8.273 3.713 8.273 8.27 0 4.558-3.715 8.27-8.274 8.27z"/>
+        </svg>
+        <span data-i18n="btn-enviar">Enviar Reserva pelo WhatsApp</span>
+      </button>
+      <p class="form-note" data-i18n="form-note">Você será redirecionado ao WhatsApp da unidade escolhida. A reserva será confirmada pela equipe.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section id="galeria">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label" data-i18n="galeria-label">Momentos & Sabores</p>
+      <h2 class="section-title" data-i18n="galeria-title">Nossa <em>Galeria</em></h2>
+      <p class="section-body" data-i18n="galeria-body">Cada foto conta uma história de sabor, cuidado e hospitalidade.</p>
+    </div>
+
+    <div class="galeria-filter reveal">
+      <button class="galeria-filter-btn active" onclick="filterGaleria('todos', this)" data-i18n="gal-todos">Todos</button>
+      <button class="galeria-filter-btn" onclick="filterGaleria('pizzas', this)" data-i18n="gal-pizzas">Pizzas</button>
+      <button class="galeria-filter-btn" onclick="filterGaleria('massas', this)" data-i18n="gal-massas">Massas</button>
+      <button class="galeria-filter-btn" onclick="filterGaleria('ambiente', this)" data-i18n="gal-ambiente">Ambiente</button>
+      <button class="galeria-filter-btn" onclick="filterGaleria('eventos', this)" data-i18n="gal-eventos">Eventos</button>
+    </div>
+
+    <div class="galeria-grid reveal" id="galeriaGrid">
+      <div class="galeria-item wide" data-cat="ambiente" onclick="openLightbox('Ambiente — Santa Massa Rio Preto')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🍽</span><span class="galeria-placeholder-label">Ambiente</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Ambiente · Rio Preto</span></div>
+      </div>
+      <div class="galeria-item" data-cat="pizzas" onclick="openLightbox('Pizza Santa Massa')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🍕</span><span class="galeria-placeholder-label">Pizza</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Pizza Especial</span></div>
+      </div>
+      <div class="galeria-item" data-cat="massas" onclick="openLightbox('Fettuccine Bolonhesa')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🍝</span><span class="galeria-placeholder-label">Massa</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Fettuccine</span></div>
+      </div>
+      <div class="galeria-item tall" data-cat="ambiente" onclick="openLightbox('Salão — Pizzaria Mirassol')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🕯</span><span class="galeria-placeholder-label">Salão</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Salão · Mirassol</span></div>
+      </div>
+      <div class="galeria-item" data-cat="pizzas" onclick="openLightbox('Pizza Trufada')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🍕</span><span class="galeria-placeholder-label">Pizza</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Pizza Trufada</span></div>
+      </div>
+      <div class="galeria-item" data-cat="eventos" onclick="openLightbox('Evento especial')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🥂</span><span class="galeria-placeholder-label">Evento</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Eventos</span></div>
+      </div>
+      <div class="galeria-item" data-cat="massas" onclick="openLightbox('Lasanha da Casa')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🍝</span><span class="galeria-placeholder-label">Massa</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Lasanha da Casa</span></div>
+      </div>
+      <div class="galeria-item" data-cat="ambiente" onclick="openLightbox('Mesa posta — Restaurante Mirassol')">
+        <div class="galeria-placeholder"><span class="galeria-placeholder-icon">🌿</span><span class="galeria-placeholder-label">Ambiente</span></div>
+        <div class="galeria-overlay"><span class="galeria-overlay-tag">Mesa Posta</span></div>
+      </div>
+    </div>
+    <p class="galeria-note reveal">Substitua os espaços acima pelas fotos reais dos estabelecimentos · Os marcadores indicam a categoria de cada imagem</p>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-placeholder" id="lightboxContent">
+    <span style="font-size:2.5rem;opacity:0.3">📷</span>
+    <span id="lightboxLabel" style="font-size:0.85rem;color:var(--text-muted);letter-spacing:0.1em;"></span>
+  </div>
+</div>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label" data-i18n="dep-label">O que dizem nossos clientes</p>
+      <h2 class="section-title" data-i18n="dep-title">Avaliações & <em>Depoimentos</em></h2>
+    </div>
+
+    <div class="depoimentos-grid reveal">
+      <div class="depoimento-card">
+        <div class="depoimento-stars">★★★★★</div>
+        <p class="depoimento-texto">"A melhor pizza da região, sem dúvida. A massa é leve, o molho é incrível e o ambiente é perfeito para um jantar em família. Vou sempre que posso!"</p>
+        <div class="depoimento-autor">
+          <div class="depoimento-avatar">AM</div>
+          <div>
+            <div class="depoimento-nome">Ana M.</div>
+            <div class="depoimento-unidade">Pizzaria · Mirassol</div>
+            <div class="depoimento-fonte">Google Reviews · 5 estrelas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="depoimento-card">
+        <div class="depoimento-stars">★★★★★</div>
+        <p class="depoimento-texto">"Fui ao almoço de sábado com a família e ficamos impressionados com a variedade e a qualidade. O risoto estava impecável. Atendimento muito atencioso!"</p>
+        <div class="depoimento-autor">
+          <div class="depoimento-avatar">RC</div>
+          <div>
+            <div class="depoimento-nome">Ricardo C.</div>
+            <div class="depoimento-unidade">Restaurante · Mirassol</div>
+            <div class="depoimento-fonte">Google Reviews · 5 estrelas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="depoimento-card">
+        <div class="depoimento-stars">★★★★★</div>
+        <p class="depoimento-texto">"Lugar lindo, comida deliciosa e equipe super simpática. Comemoramos nosso aniversário lá e foi uma noite inesquecível. Recomendo demais o Santa Massa!"</p>
+        <div class="depoimento-autor">
+          <div class="depoimento-avatar">JS</div>
+          <div>
+            <div class="depoimento-nome">Juliana S.</div>
+            <div class="depoimento-unidade">Santa Massa · Rio Preto</div>
+            <div class="depoimento-fonte">Google Reviews · 5 estrelas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="depoimento-card">
+        <div class="depoimento-stars">★★★★★</div>
+        <p class="depoimento-texto">"Tiramisù de fazer chorar de bom. Sério, é a melhor sobremesa que já comi em Rio Preto. O ambiente escuro e elegante combina perfeitamente com a culinária."</p>
+        <div class="depoimento-autor">
+          <div class="depoimento-avatar">LF</div>
+          <div>
+            <div class="depoimento-nome">Lucas F.</div>
+            <div class="depoimento-unidade">Santa Massa · Rio Preto</div>
+            <div class="depoimento-fonte">Google Reviews · 5 estrelas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="depoimento-card">
+        <div class="depoimento-stars">★★★★★</div>
+        <p class="depoimento-texto">"Fiz reserva pelo site e foi super fácil. A mesa estava perfeita na hora marcada. Pizza de parma com rúcula é simplesmente excepcional. Virei cliente fiel."</p>
+        <div class="depoimento-autor">
+          <div class="depoimento-avatar">MP</div>
+          <div>
+            <div class="depoimento-nome">Mariana P.</div>
+            <div class="depoimento-unidade">Pizzaria · Mirassol</div>
+            <div class="depoimento-fonte">iFood · 5 estrelas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="depoimento-card">
+        <div class="depoimento-stars">★★★★☆</div>
+        <p class="depoimento-texto">"Almoço executivo muito bem servido, porções generosas e preço justo. O buffet sempre tem novidades. Ótima opção para almoço de negócios aqui em Mirassol."</p>
+        <div class="depoimento-autor">
+          <div class="depoimento-avatar">FO</div>
+          <div>
+            <div class="depoimento-nome">Fernando O.</div>
+            <div class="depoimento-unidade">Restaurante · Mirassol</div>
+            <div class="depoimento-fonte">Google Reviews · 4 estrelas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="depoimentos-cta reveal">
+      <a href="https://g.page/r/santamassa" target="_blank">Ver todas as avaliações no Google →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY / IFOOD -->
+<section id="delivery">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label" data-i18n="delivery-label">Peça sem sair de casa</p>
+      <h2 class="section-title" data-i18n="delivery-title">Delivery & <em>iFood</em></h2>
+      <p class="section-body" style="margin:0 auto;" data-i18n="delivery-body">Sabor Santa Massa direto na sua porta. Escolha a unidade mais próxima e peça agora.</p>
+    </div>
+
+    <div class="delivery-grid reveal">
+      <div class="delivery-card">
+        <div class="delivery-card-top">
+          <span class="delivery-badge">iFood</span>
+        </div>
+        <div class="delivery-card-nome">Santa Massa Pizzaria</div>
+        <div class="delivery-card-cidade">Mirassol · SP</div>
+        <p class="delivery-card-desc">Pizzas artesanais e massas entregues quentinhas na sua casa. Cardápio completo disponível no iFood.</p>
+        <a href="LINK_IFOOD_PIZZARIA_MIRASSOL" target="_blank" class="delivery-btn" id="ifood-pizzaria">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          Pedir no iFood
+        </a>
+      </div>
+
+      <div class="delivery-card">
+        <div class="delivery-card-top">
+          <span class="delivery-badge">iFood</span>
+        </div>
+        <div class="delivery-card-nome">Santa Massa Restaurante</div>
+        <div class="delivery-card-cidade">Mirassol · SP</div>
+        <p class="delivery-card-desc">Pratos do nosso buffet e cardápio à la carte com o mesmo capricho do salão, entregues em casa.</p>
+        <a href="LINK_IFOOD_RESTAURANTE_MIRASSOL" target="_blank" class="delivery-btn" id="ifood-restaurante">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          Pedir no iFood
+        </a>
+      </div>
+
+      <div class="delivery-card">
+        <div class="delivery-card-top">
+          <span class="delivery-badge">iFood</span>
+        </div>
+        <div class="delivery-card-nome">Santa Massa</div>
+        <div class="delivery-card-cidade">São José do Rio Preto · SP</div>
+        <p class="delivery-card-desc">Nossa unidade em Rio Preto também entrega! Pizzas especiais, massas e sobremesas até você.</p>
+        <a href="LINK_IFOOD_RIOPRETO" target="_blank" class="delivery-btn" id="ifood-riopreto">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          Pedir no iFood
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAPAS -->
+<section id="mapas">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label" data-i18n="mapas-label">Como chegar</p>
+      <h2 class="section-title" data-i18n="mapas-title">Nossas <em>Localizações</em></h2>
+    </div>
+
+    <div class="mapas-tabs reveal">
+      <button class="mapas-tab active" onclick="switchMapa('pizzaria')" data-i18n="tab-pizzaria">Pizzaria · Mirassol</button>
+      <button class="mapas-tab" onclick="switchMapa('restaurante')" data-i18n="tab-restaurante">Restaurante · Mirassol</button>
+      <button class="mapas-tab" onclick="switchMapa('riopreto')" data-i18n="tab-riopreto">Rio Preto</button>
+    </div>
+
+    <!-- Pizzaria -->
+    <div class="mapas-panel active" id="mapa-pizzaria">
+      <div class="mapa-info">
+        <div class="mapa-unidade-nome">Santa Massa Pizzaria</div>
+        <div class="mapa-cidade">Mirassol · SP</div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">◎</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-endereco">Endereço</div>
+            <div class="mapa-detail-text">Rua [Endereço completo]<br>Mirassol — SP</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">◷</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-horario-func">Horário de funcionamento</div>
+            <div class="mapa-detail-text" data-i18n="horario-pizzaria">Terça a Domingo<br>18h00 às 23h00</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">☎</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-telefone">Telefone / WhatsApp</div>
+            <div class="mapa-detail-text">(17) 99191-5095</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">🅿</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-estacionamento">Estacionamento</div>
+            <div class="mapa-detail-text" data-i18n="estac-proprio">Estacionamento próprio disponível</div>
+          </div>
+        </div>
+        <div class="mapa-actions">
+          <a href="https://maps.google.com/?q=ENDERECO_PIZZARIA_MIRASSOL" target="_blank" class="mapa-btn mapa-btn-gold" data-i18n="btn-googlemaps">Abrir no Google Maps</a>
+          <button class="mapa-btn mapa-btn-outline" onclick="selectUnidade('pizzaria-mirassol')" data-i18n="btn-reservar-mapa">Fazer Reserva</button>
+        </div>
+      </div>
+      <div class="mapa-embed">
+        <div class="mapa-placeholder-text" data-i18n="mapa-placeholder">
+          <span style="font-size:2rem;opacity:0.25;display:block;margin-bottom:0.5rem">📍</span>
+          Insira o link embed do Google Maps<br>desta unidade aqui
+        </div>
+      </div>
+    </div>
+
+    <!-- Restaurante -->
+    <div class="mapas-panel" id="mapa-restaurante">
+      <div class="mapa-info">
+        <div class="mapa-unidade-nome" data-i18n="unit-restaurante">Santa Massa Restaurante</div>
+        <div class="mapa-cidade">Mirassol · SP</div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">◎</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-endereco">Endereço</div>
+            <div class="mapa-detail-text">Rua [Endereço completo]<br>Mirassol — SP</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">◷</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-horario-func">Horário de funcionamento</div>
+            <div class="mapa-detail-text" data-i18n="horario-restaurante">Seg a Sex: 11h às 15h<br>Sáb e Dom: 11h às 16h</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">☎</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-telefone">Telefone / WhatsApp</div>
+            <div class="mapa-detail-text">(17) 99191-5095</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">🅿</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-estacionamento">Estacionamento</div>
+            <div class="mapa-detail-text" data-i18n="estac-proprio">Estacionamento próprio disponível</div>
+          </div>
+        </div>
+        <div class="mapa-actions">
+          <a href="https://maps.google.com/?q=ENDERECO_RESTAURANTE_MIRASSOL" target="_blank" class="mapa-btn mapa-btn-gold" data-i18n="btn-googlemaps">Abrir no Google Maps</a>
+          <button class="mapa-btn mapa-btn-outline" onclick="selectUnidade('restaurante-mirassol')" data-i18n="btn-reservar-mapa">Fazer Reserva</button>
+        </div>
+      </div>
+      <div class="mapa-embed">
+        <div class="mapa-placeholder-text" data-i18n="mapa-placeholder">
+          <span style="font-size:2rem;opacity:0.25;display:block;margin-bottom:0.5rem">📍</span>
+          Insira o link embed do Google Maps<br>desta unidade aqui
+        </div>
+      </div>
+    </div>
+
+    <!-- Rio Preto -->
+    <div class="mapas-panel" id="mapa-riopreto">
+      <div class="mapa-info">
+        <div class="mapa-unidade-nome">Santa Massa</div>
+        <div class="mapa-cidade">São José do Rio Preto · SP</div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">◎</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-endereco">Endereço</div>
+            <div class="mapa-detail-text">Rua [Endereço completo]<br>São José do Rio Preto — SP</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">◷</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-horario-func">Horário de funcionamento</div>
+            <div class="mapa-detail-text" data-i18n="horario-riopreto">Terça a Domingo<br>18h00 às 23h00</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">☎</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-telefone">Telefone / WhatsApp</div>
+            <div class="mapa-detail-text">(17) 3200-0003</div>
+          </div>
+        </div>
+        <div class="mapa-detail">
+          <span class="mapa-detail-icon">🅿</span>
+          <div>
+            <div class="mapa-detail-label" data-i18n="lbl-estacionamento">Estacionamento</div>
+            <div class="mapa-detail-text" data-i18n="estac-rua">Estacionamento na rua e conveniado próximo</div>
+          </div>
+        </div>
+        <div class="mapa-actions">
+          <a href="https://maps.google.com/?q=ENDERECO_RIOPRETO" target="_blank" class="mapa-btn mapa-btn-gold" data-i18n="btn-googlemaps">Abrir no Google Maps</a>
+          <button class="mapa-btn mapa-btn-outline" onclick="selectUnidade('riopreto')" data-i18n="btn-reservar-mapa">Fazer Reserva</button>
+        </div>
+      </div>
+      <div class="mapa-embed">
+        <div class="mapa-placeholder-text" data-i18n="mapa-placeholder">
+          <span style="font-size:2rem;opacity:0.25;display:block;margin-bottom:0.5rem">📍</span>
+          Insira o link embed do Google Maps<br>desta unidade aqui
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label" data-i18n="faq-label">Dúvidas frequentes</p>
+      <h2 class="section-title" data-i18n="faq-title">Perguntas <em>Frequentes</em></h2>
+      <p class="section-body" style="margin:0 auto;" data-i18n="faq-body">Tudo que você precisa saber antes de vir nos visitar.</p>
+    </div>
+
+    <div class="faq-grid reveal">
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q1">Há estacionamento nas unidades?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a1">
+          A Pizzaria e o Restaurante em Mirassol contam com estacionamento próprio gratuito para clientes. A unidade de Rio Preto possui estacionamento na rua e opções conveniadas a até 100m do estabelecimento.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q2">Aceitam animais de estimação?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a2">
+          Animais de estimação são bem-vindos nas áreas externas das unidades que possuem espaço ao ar livre. Por questões de higiene e regulamentação sanitária, não são permitidos no salão interno. Entre em contato com a unidade desejada para confirmar a disponibilidade de espaço externo.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q3">Precisa fazer reserva? Há reserva mínima?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a3">
+          Reserva não é obrigatória, mas é altamente recomendada, especialmente às sextas, sábados e datas comemorativas. Não há número mínimo de pessoas. O horário limite de chegada é 19h30 — após esse horário a mesa não é garantida. A unidade de Rio Preto aceita no máximo 16 pessoas às sextas e sábados; para grupos maiores, entre em contato diretamente pelo WhatsApp.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q4">Fazem meia-entrada ou têm algum benefício?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a4">
+          Não cobramos couvert artístico nem taxa de entrada. Os preços praticados são por prato ou buffet, conforme indicado no cardápio. Eventualmente oferecemos promoções para aniversariantes — acompanhe nossas redes sociais para ficar por dentro.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q5">Quais formas de pagamento são aceitas?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a5">
+          Aceitamos dinheiro, cartões de débito e crédito das principais bandeiras (Visa, Mastercard, Elo, Amex), Pix e vale-refeição. Parcelamento no crédito disponível conforme bandeira.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q6">Atendem eventos e comemorações particulares?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a6">
+          Sim! Atendemos aniversários, confraternizações, jantares corporativos e outras ocasiões especiais. Temos menus personalizados e possibilidade de reserva do salão inteiro para grupos grandes. Entre em contato pelo WhatsApp da unidade desejada para orçamento.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q7">Têm opções para restrições alimentares?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a7">
+          Sim. Nosso cardápio conta com opções vegetarianas e podemos adaptar alguns pratos mediante solicitação. Para restrições como intolerância ao glúten ou alergia a ingredientes específicos, informe no momento da reserva ou diretamente ao garçom para que possamos orientar da melhor forma.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span data-i18n="faq-q8">Posso cancelar ou alterar uma reserva?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer" data-i18n="faq-a8">
+          Claro. Para cancelar ou alterar sua reserva, basta entrar em contato pelo WhatsApp da unidade com até 2 horas de antecedência. Não cobramos nenhuma taxa por cancelamento. A equipe confirmará a alteração e ficará à sua disposição para reagendar.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Santa Massa</div>
+      <p class="footer-brand-tagline">
+        <span data-i18n="footer-tagline">Tradição italiana no coração do interior paulista. Três unidades, uma única filosofia: sabor genuíno e hospitalidade de verdade.</span>
+      </p>
+    </div>
+    <div>
+      <p class="footer-col-title" data-i18n="footer-nav">Navegação</p>
+      <ul class="footer-col-links">
+        <li><a href="#historia" data-i18n="nav-historia">Nossa História</a></li>
+        <li><a href="#unidades" data-i18n="nav-unidades">Unidades</a></li>
+        <li><a href="#cardapio" data-i18n="nav-cardapio">Cardápio</a></li>
+        <li><a href="#galeria" data-i18n="nav-galeria">Galeria</a></li>
+        <li><a href="#reservas" data-i18n="nav-reservas">Reservas</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title" data-i18n="footer-unidades">Unidades</p>
+      <ul class="footer-col-links">
+        <li><a href="#unidades">Pizzaria · Mirassol</a></li>
+        <li><a href="#unidades" data-i18n="unit-restaurante">Restaurante · Mirassol</a></li>
+        <li><a href="#unidades">Rio Preto</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title" data-i18n="footer-contato">Contato</p>
+      <ul class="footer-col-links">
+        <li><a href="https://www.instagram.com/santamassariopreto/" target="_blank">@santamassariopreto</a></li>
+        <li><a href="#reservas" data-i18n="nav-cta">Fazer Reserva</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span><span data-i18n="footer-copy">© 2025 Grupo Santa Massa · Todos os direitos reservados</span></span>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/santamassariopreto/" target="_blank">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── WHATSAPP — NÚMEROS REAIS DAS UNIDADES ───────────────────────────────
+  const whatsappNumbers = {
+    'pizzaria-mirassol':    '5517991915095',   // Santa Massa Pizzaria · Mirassol
+    'restaurante-mirassol': '5517991915095',   // Santa Massa Restaurante · Mirassol (mesmo número)
+    'riopreto':             '5517992259526'    // Santa Massa · Rio Preto
+  };
+
+  const unidadeNomes = {
+    'pizzaria-mirassol':    'Santa Massa Pizzaria — Mirassol',
+    'restaurante-mirassol': 'Santa Massa Restaurante — Mirassol',
+    'riopreto':             'Santa Massa — São José do Rio Preto'
+  };
+
+  const pessoasLabel = {
+    '1-2':  '1 a 2 pessoas',
+    '3-4':  '3 a 4 pessoas',
+    '5-6':  '5 a 6 pessoas',
+    '7-10': '7 a 10 pessoas',
+    '10+':  'Mais de 10 pessoas'
+  };
+
+  // ─── HELPERS — Rio Preto aviso ───────────────────────────────────────────
+  function onUnidadeChange() { checkRioPretoAviso(); updateHorarios(); }
+  function onPessoasChange() { checkRioPretoAviso(); }
+  function onDataChange()    { checkRioPretoAviso(); updateHorarios(); }
+
+  function updateHorarios() {
+    const unidade = document.getElementById('res-unidade').value;
+    const data    = document.getElementById('res-data').value;
+    const sel     = document.getElementById('res-horario');
+    const atual   = sel.value; // preserve selection if still valid
+
+    // Determine if lunch slots should appear
+    // Rio Preto: only on Sundays (dow === 0), and only up to 12:00
+    // All other units: lunch available every day
+    let showAlmoco = true;
+    let almocoCutoff = '14:30'; // default last lunch slot
+
+    if (unidade === 'riopreto') {
+      if (!data) {
+        showAlmoco = false; // hide until date is picked
+      } else {
+        const dow = new Date(data + 'T12:00:00').getDay(); // 0=dom
+        if (dow === 0) {
+          showAlmoco = true;
+          almocoCutoff = '12:00'; // Rio Preto Sunday: max 12h00
+        } else {
+          showAlmoco = false;
+        }
+      }
+    }
+
+    const isEn = currentLang === 'en';
+    const placeholder = isEn ? 'Select a time' : 'Selecione o horário';
+    const lunchLabel  = isEn ? 'Lunch' : 'Almoço';
+    const dinnerLabel = isEn ? 'Dinner' : 'Jantar';
+
+    // All possible lunch slots up to 14:30
+    const lunchSlots = [
+      ['11:00','11h00'],['11:30','11h30'],['12:00','12h00'],['12:30','12h30'],
+      ['13:00','13h00'],['13:30','13h30'],['14:00','14h00'],['14:30','14h30']
+    ].filter(([v]) => v <= almocoCutoff);
+
+    const dinnerSlots = [
+      ['18:00','18h00'],['18:30','18h30'],['19:00','19h00'],['19:30','19h30']
+    ];
+
+    let html = `<option value="">${placeholder}</option>`;
+
+    if (showAlmoco && lunchSlots.length) {
+      html += `<optgroup label="${lunchLabel}">`;
+      lunchSlots.forEach(([v, t]) => {
+        html += `<option value="${v}"${atual === v ? ' selected' : ''}>${t}</option>`;
+      });
+      html += `</optgroup>`;
+    }
+
+    html += `<optgroup label="${dinnerLabel}">`;
+    dinnerSlots.forEach(([v, t]) => {
+      html += `<option value="${v}"${atual === v ? ' selected' : ''}>${t}</option>`;
+    });
+    html += `</optgroup>`;
+
+    sel.innerHTML = html;
+  }
+
+  function checkRioPretoAviso() {
+    const unidade = document.getElementById('res-unidade').value;
+    const pessoas = parseInt(document.getElementById('res-pessoas').value, 10);
+    const data    = document.getElementById('res-data').value;
+    const aviso   = document.getElementById('riopreto-aviso');
+    if (!aviso) return;
+    if (unidade === 'riopreto' && data) {
+      const dow = new Date(data + 'T12:00:00').getDay(); // 5=sex, 6=sab
+      if ((dow === 5 || dow === 6) && pessoas > 16) {
+        aviso.style.display = 'block';
+        return;
+      }
+    }
+    aviso.style.display = 'none';
+  }
+
+  // ─── VALIDAÇÃO DE CAMPOS ─────────────────────────────────────────────────
+  function validarCampo(id, mensagem) {
+    const el = document.getElementById(id);
+    const val = el.value.trim();
+    if (!val) {
+      el.style.borderColor = '#8B2020';
+      el.focus();
+      showFormError(mensagem);
+      setTimeout(() => { el.style.borderColor = ''; }, 3000);
+      return false;
+    }
+    el.style.borderColor = '';
+    return true;
+  }
+
+  function showFormError(msg) {
+    let err = document.getElementById('form-error');
+    if (!err) {
+      err = document.createElement('div');
+      err.id = 'form-error';
+      err.style.cssText = 'background:rgba(139,32,32,0.15);border:1px solid rgba(139,32,32,0.4);color:#e87070;padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;text-align:center;';
+      const btn = document.querySelector('.btn-whatsapp');
+      btn.parentNode.insertBefore(err, btn);
+    }
+    err.textContent = msg;
+    err.style.display = 'block';
+    setTimeout(() => { if (err) err.style.display = 'none'; }, 4000);
+  }
+
+  function setBtnLoading(loading) {
+    const btn = document.querySelector('.btn-whatsapp');
+    if (loading) {
+      btn.disabled = true;
+      btn.dataset.original = btn.innerHTML;
+      btn.innerHTML = '<span style="opacity:0.7;letter-spacing:0.15em;">Abrindo WhatsApp...</span>';
+      btn.style.opacity = '0.75';
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = btn.dataset.original || btn.innerHTML;
+      btn.style.opacity = '';
+    }
+  }
+
+  // ─── ENVIO DA RESERVA ─────────────────────────────────────────────────────
+  function enviarReserva() {
+    const err = document.getElementById('form-error');
+    if (err) err.style.display = 'none';
+
+    if (!validarCampo('res-nome',    'Por favor, informe seu nome.'))            return;
+    if (!validarCampo('res-unidade', 'Por favor, selecione a unidade desejada.')) return;
+    if (!validarCampo('res-pessoas', 'Por favor, informe o número de pessoas.'))  return;
+    if (!validarCampo('res-data',    'Por favor, informe a data desejada.'))       return;
+    if (!validarCampo('res-horario', 'Por favor, informe o horário desejado.'))    return;
+
+    const nome    = document.getElementById('res-nome').value.trim();
+    const tel     = document.getElementById('res-telefone').value.trim();
+    const unidade = document.getElementById('res-unidade').value;
+    const pessoas = parseInt(document.getElementById('res-pessoas').value, 10);
+    const data    = document.getElementById('res-data').value;
+    const horario = document.getElementById('res-horario').value;
+    const obs     = document.getElementById('res-obs').value.trim();
+
+    // Validação: número de pessoas deve ser positivo
+    if (isNaN(pessoas) || pessoas < 1) {
+      showFormError('O número de pessoas deve ser maior que zero.');
+      document.getElementById('res-pessoas').style.borderColor = '#8B2020';
+      return;
+    }
+
+    // Validação: Rio Preto — máx 16 pessoas sex/sáb
+    const dataObj = new Date(data + 'T12:00:00');
+    const dow = dataObj.getDay(); // 5=sexta, 6=sábado
+    if (unidade === 'riopreto' && (dow === 5 || dow === 6) && pessoas > 16) {
+      showFormError('A unidade de Rio Preto não aceita reservas para mais de 16 pessoas às sextas e sábados. Entre em contato direto pelo WhatsApp para verificar disponibilidade.');
+      document.getElementById('res-pessoas').style.borderColor = '#8B2020';
+      return;
+    }
+
+    // Validação: data no passado
+    const hoje = new Date(); hoje.setHours(0,0,0,0);
+    if (dataObj < hoje) {
+      showFormError('A data selecionada já passou. Por favor, escolha uma data futura.');
+      document.getElementById('res-data').style.borderColor = '#8B2020';
+      return;
+    }
+
+    const dataFormatada = dataObj.toLocaleDateString('pt-BR', {
+      weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+    });
+
+    // Formata horário para exibição
+    const [hh, mm] = horario.split(':');
+    const horarioFmt = `${hh}h${mm}`;
+
+    const separador = '─────────────────────────';
+    let msg = '';
+    msg += `🍽 *RESERVA — ${unidadeNomes[unidade].toUpperCase()}*\n`;
+    msg += `${separador}\n\n`;
+    msg += `👤 *Nome:* ${nome}\n`;
+    if (tel) msg += `📱 *Contato:* ${tel}\n`;
+    msg += `\n`;
+    msg += `📅 *Data:* ${dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1)}\n`;
+    msg += `🕐 *Horário:* ${horarioFmt}\n`;
+    msg += `👥 *Pessoas:* ${pessoas} ${pessoas === 1 ? 'pessoa' : 'pessoas'}\n`;
+    if (obs) {
+      msg += `\n📝 *Observações:*\n${obs}\n`;
+    }
+    msg += `\n${separador}\n`;
+    msg += `_Solicitação enviada pelo site santamassa.com.br_\n`;
+    msg += `_Aguardo confirmação. Obrigado(a)!_ 🙏`;
+
+    const number = whatsappNumbers[unidade];
+    const url    = `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
+
+    setBtnLoading(true);
+    setTimeout(() => {
+      window.open(url, '_blank');
+      setBtnLoading(false);
+      showSuccessMessage();
+    }, 600);
+  }
+
+  function showSuccessMessage() {
+    let ok = document.getElementById('form-success');
+    if (!ok) {
+      ok = document.createElement('div');
+      ok.id = 'form-success';
+      ok.style.cssText = 'background:rgba(15,110,86,0.15);border:1px solid rgba(15,110,86,0.4);color:#4ec9a0;padding:1rem 1.2rem;font-size:0.88rem;margin-top:1rem;text-align:center;line-height:1.6;';
+      document.querySelector('.btn-whatsapp').insertAdjacentElement('afterend', ok);
+    }
+    ok.innerHTML = '✓ WhatsApp aberto com sucesso!<br><span style="font-size:0.78rem;opacity:0.75;">Caso a janela não tenha aberto, verifique se o pop-up foi bloqueado pelo navegador.</span>';
+    ok.style.display = 'block';
+    setTimeout(() => { if (ok) ok.style.display = 'none'; }, 8000);
+  }
+
+  function selectUnidade(unidade) {
+    document.getElementById('res-unidade').value = unidade;
+    document.getElementById('reservas').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function showCardapio(tab) {
+    switchTab(tab);
+    document.getElementById('cardapio').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Track active tab
+  let activeTab = 'pizzaria';
+
+  function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll('.cardapio-tab').forEach(t => t.classList.remove('active'));
+    // Hide all panels
+    document.querySelectorAll('.cardapio-panel').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = 'none';
+    });
+    // Show correct panel based on language
+    const suffix = currentLang === 'en' ? '-en' : '';
+    const panel = document.getElementById('tab-' + tab + suffix);
+    if (panel) { panel.style.display = 'block'; panel.classList.add('active'); }
+    const tabs = document.querySelectorAll('.cardapio-tab');
+    const map = { 'pizzaria': 0, 'restaurante': 1, 'riopreto': 2 };
+    if (tabs[map[tab]]) tabs[map[tab]].classList.add('active');
+  }
+
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // GALERIA FILTER
+  function filterGaleria(cat, btn) {
+    document.querySelectorAll('.galeria-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.galeria-item').forEach(item => {
+      if (cat === 'todos' || item.dataset.cat === cat) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  function openLightbox(label) {
+    document.getElementById('lightboxLabel').textContent = label;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox(e) {
+    if (!e || e.target === document.getElementById('lightbox') || e.currentTarget.tagName === 'BUTTON') {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+  }
+
+  // MAPAS TABS
+  function switchMapa(tab) {
+    document.querySelectorAll('.mapas-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.mapas-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('mapa-' + tab).classList.add('active');
+    const mapTabs = document.querySelectorAll('.mapas-tab');
+    const mapaMap = { 'pizzaria': 0, 'restaurante': 1, 'riopreto': 2 };
+    mapTabs[mapaMap[tab]].classList.add('active');
+  }
+
+  // FAQ ACCORDION
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-question.open').forEach(q => {
+      q.classList.remove('open');
+      q.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      answer.classList.add('open');
+    }
+  }
+
+  // ─── INTERNACIONALIZAÇÃO PT / EN ─────────────────────────────────────────
+  const translations = {
+    pt: {
+      // Nav
+      'nav-historia': 'Nossa História',
+      'nav-pedir': '🛒 Pedir Online', 'nav-unidades': 'Unidades',
+      'nav-cardapio': 'Cardápio', 'nav-galeria': 'Galeria',
+      'nav-reservas': 'Reservas', 'nav-cta': 'Reservar Mesa',
+      // Hero
+      'hero-eyebrow': 'Desde 1998 · Mirassol & São José do Rio Preto',
+      'hero-subtitle': 'Tradição italiana, sabor genuíno e hospitalidade que transforma cada refeição em uma experiência inesquecível.',
+      'hero-btn-reserva': 'Fazer Reserva', 'hero-btn-cardapio': 'Ver Cardápio',
+      'hero-divider': 'Nossas Unidades', 'unit-restaurante': 'Santa Massa Restaurante',
+      // História
+      'historia-label': 'Nossa História',
+      'historia-title': 'Uma <em>tradição</em> que nasceu à mesa',
+      'historia-quote': 'Uma cozinha, uma família e a paixão por transformar ingredientes simples em momentos extraordinários.',
+      'historia-body1': 'O grupo Santa Massa nasceu com um propósito claro: levar à mesa de cada cliente o melhor da culinária italiana com o acolhimento genuíno do interior paulista. O que começou como um sonho de família tornou-se um dos grupos de restaurantes mais queridos da região.',
+      'historia-body2': 'Com unidades em Mirassol e São José do Rio Preto, mantemos a mesma essência de sempre: ingredientes selecionados, receitas cuidadosas e um atendimento que faz você se sentir em casa.',
+      'timeline-1998': 'Fundação da primeira unidade Santa Massa em Mirassol, com foco em massas artesanais e pizzas ao forno a lenha.',
+      'timeline-2005': 'Expansão com o Santa Massa Restaurante, ampliando o cardápio para almoços e experiências completas de gastronomia italiana.',
+      'timeline-2015': 'Abertura da unidade em São José do Rio Preto, levando a tradição Santa Massa para a maior cidade da região.',
+      'timeline-hoje-label': 'Hoje',
+      'timeline-hoje': 'Três unidades, mais de 25 anos de história e milhares de famílias que escolhem o Santa Massa para suas memórias mais especiais.',
+      // Unidades
+      'unidades-label': 'Onde nos encontrar', 'unidades-title': 'Nossas <em>Unidades</em>',
+      'unidade-pizzaria-desc': 'A casa das pizzas artesanais e massas tradicionais. Um ambiente aconchegante para jantares em família ou entre amigos, com o sabor autêntico que consagrou o grupo.',
+      'unidade-restaurante-desc': 'O destino perfeito para o almoço. Buffet completo com pratos quentes, saladas frescas e sobremesas artesanais. Culinária italiana com o charme do dia a dia.',
+      'unidade-riopreto-desc': 'A mais recente e moderna unidade do grupo. Pizzas, massas e pratos especiais em um espaço sofisticado no coração de Rio Preto, para todas as ocasiões.',
+      'horario-pizzaria': 'Ter–Dom: 18h às 23h', 'horario-restaurante': 'Seg–Sex: 11h às 15h · Sáb–Dom: 11h às 16h',
+      'horario-riopreto': 'Ter–Dom: 18h às 23h',
+      'btn-reservar': 'Reservar Mesa', 'btn-cardapio': 'Ver Cardápio',
+      // Cardápio
+      'cardapio-label': 'O que servimos', 'cardapio-title': 'Nosso <em>Cardápio</em>',
+      'cardapio-body': 'Ingredientes selecionados, receitas com alma. Cada prato conta uma história.',
+      'tab-pizzaria': 'Pizzaria · Mirassol', 'tab-restaurante': 'Restaurante · Mirassol', 'tab-riopreto': 'Rio Preto',
+      // Galeria
+      'galeria-label': 'Momentos & Sabores', 'galeria-title': 'Nossa <em>Galeria</em>',
+      'galeria-body': 'Cada foto conta uma história de sabor, cuidado e hospitalidade.',
+      'gal-todos': 'Todos', 'gal-pizzas': 'Pizzas', 'gal-massas': 'Massas',
+      'gal-ambiente': 'Ambiente', 'gal-eventos': 'Eventos',
+      // Depoimentos
+      'dep-label': 'O que dizem nossos clientes',
+      'dep-title': 'Avaliações & <em>Depoimentos</em>',
+      // Delivery
+      'delivery-label': 'Peça sem sair de casa', 'delivery-title': 'Delivery & <em>iFood</em>',
+      'delivery-body': 'Sabor Santa Massa direto na sua porta. Escolha a unidade mais próxima e peça agora.',
+      // Mapas
+      'mapas-label': 'Como chegar', 'mapas-title': 'Nossas <em>Localizações</em>',
+      'lbl-endereco': 'Endereço', 'lbl-horario-func': 'Horário de funcionamento',
+      'lbl-telefone': 'Telefone / WhatsApp', 'lbl-estacionamento': 'Estacionamento',
+      'estac-proprio': 'Estacionamento próprio disponível',
+      'estac-rua': 'Estacionamento na rua e conveniado próximo',
+      'btn-googlemaps': 'Abrir no Google Maps', 'btn-reservar-mapa': 'Fazer Reserva',
+      'mapa-placeholder': '📍<br>Insira o link embed do Google Maps<br>desta unidade aqui',
+      // Reservas
+      'res-label': 'Reserve sua experiência', 'res-title': 'Faça sua <em>Reserva</em>',
+      'res-body': 'Preencha os dados abaixo e você será redirecionado para o WhatsApp da unidade escolhida para confirmar sua reserva.',
+      'res-form-title': 'Informações para Reserva',
+      'lbl-nome': 'Seu nome', 'ph-nome': 'Nome completo',
+      'lbl-tel': 'Telefone / WhatsApp',
+      'lbl-pessoas': 'Número de pessoas',
+      'aviso-riopreto': '⚠ Sextas e sábados a unidade de Rio Preto aceita no máximo 16 pessoas.',
+      'lbl-data': 'Data desejada', 'lbl-horario': 'Horário de chegada',
+      'opt-horario': 'Selecione o horário',
+      'lbl-horario-limite': '(máximo: 19h30)',
+      'aviso-horario': '⚠ O horário máximo de chegada é 19h30. Após este horário a mesa não será mantida.',
+      'horario-info': '⏰ As reservas são mantidas até as 19h30 — este é o horário limite de chegada.',
+      'lbl-obs': 'Observações (opcional)',
+      'ph-obs': 'Alergias, ocasião especial, preferências de mesa...',
+      'btn-enviar': 'Enviar Reserva pelo WhatsApp',
+      'form-note': 'Você será redirecionado ao WhatsApp da unidade escolhida. A reserva será confirmada pela equipe.',
+      // FAQ
+      'faq-label': 'Dúvidas frequentes', 'faq-title': 'Perguntas <em>Frequentes</em>',
+      'faq-body': 'Tudo que você precisa saber antes de vir nos visitar.',
+      'faq-q1': 'Há estacionamento nas unidades?',
+      'faq-a1': 'A Pizzaria e o Restaurante em Mirassol contam com estacionamento próprio gratuito para clientes. A unidade de Rio Preto possui estacionamento na rua e opções conveniadas a até 100m do estabelecimento.',
+      'faq-q2': 'Aceitam animais de estimação?',
+      'faq-a2': 'Animais de estimação são bem-vindos nas áreas externas das unidades que possuem espaço ao ar livre. Por questões de higiene e regulamentação sanitária, não são permitidos no salão interno. Entre em contato com a unidade desejada para confirmar a disponibilidade de espaço externo.',
+      'faq-q3': 'Precisa fazer reserva? Há reserva mínima?',
+      'faq-a3': 'Reserva não é obrigatória, mas é altamente recomendada, especialmente às sextas, sábados e datas comemorativas. Não há número mínimo de pessoas. O horário limite de chegada é 19h30 — após esse horário a mesa não é garantida. A unidade de Rio Preto aceita no máximo 16 pessoas às sextas e sábados; para grupos maiores, entre em contato diretamente pelo WhatsApp.',
+      'faq-q4': 'Fazem meia-entrada ou têm algum benefício?',
+      'faq-a4': 'Não cobramos couvert artístico nem taxa de entrada. Os preços praticados são por prato ou buffet, conforme indicado no cardápio. Eventualmente oferecemos promoções para aniversariantes — acompanhe nossas redes sociais.',
+      'faq-q5': 'Quais formas de pagamento são aceitas?',
+      'faq-a5': 'Aceitamos dinheiro, cartões de débito e crédito das principais bandeiras (Visa, Mastercard, Elo, Amex), Pix e vale-refeição. Parcelamento no crédito disponível conforme bandeira.',
+      'faq-q6': 'Atendem eventos e comemorações particulares?',
+      'faq-a6': 'Sim! Atendemos aniversários, confraternizações, jantares corporativos e outras ocasiões especiais. Temos menus personalizados e possibilidade de reserva do salão inteiro para grupos grandes. Entre em contato pelo WhatsApp da unidade desejada para orçamento.',
+      'faq-q7': 'Têm opções para restrições alimentares?',
+      'faq-a7': 'Sim. Nosso cardápio conta com opções vegetarianas e podemos adaptar alguns pratos mediante solicitação. Para restrições como intolerância ao glúten ou alergias específicas, informe no momento da reserva ou diretamente ao garçom.',
+      'faq-q8': 'Posso cancelar ou alterar uma reserva?',
+      'faq-a8': 'Claro. Para cancelar ou alterar sua reserva, basta entrar em contato pelo WhatsApp da unidade com até 2 horas de antecedência. Não cobramos nenhuma taxa por cancelamento. A equipe confirmará a alteração e ficará à sua disposição para reagendar.',
+      // Footer
+      'footer-tagline': 'Tradição italiana no coração do interior paulista. Três unidades, uma única filosofia: sabor genuíno e hospitalidade de verdade.',
+      'footer-nav': 'Navegação', 'footer-unidades': 'Unidades', 'footer-contato': 'Contato',
+      'footer-copy': '© 2025 Grupo Santa Massa · Todos os direitos reservados',
+    },
+    en: {
+      // Nav
+      'nav-historia': 'Our Story',
+      'nav-pedir': '🛒 Order Online', 'nav-unidades': 'Locations',
+      'nav-cardapio': 'Menu', 'nav-galeria': 'Gallery',
+      'nav-reservas': 'Reservations', 'nav-cta': 'Book a Table',
+      // Hero
+      'hero-eyebrow': 'Since 1998 · Mirassol & São José do Rio Preto',
+      'hero-subtitle': 'Italian tradition, genuine flavour and hospitality that turns every meal into an unforgettable experience.',
+      'hero-btn-reserva': 'Book a Table', 'hero-btn-cardapio': 'View Menu',
+      'hero-divider': 'Our Locations', 'unit-restaurante': 'Santa Massa Restaurant',
+      // História
+      'historia-label': 'Our Story',
+      'historia-title': 'A <em>tradition</em> born at the table',
+      'historia-quote': 'One kitchen, one family and a passion for turning simple ingredients into extraordinary moments.',
+      'historia-body1': 'The Santa Massa Group was born with a clear purpose: to bring the best of Italian cuisine to every guest\'s table, with the genuine warmth of inland São Paulo. What started as a family dream became one of the most beloved restaurant groups in the region.',
+      'historia-body2': 'With locations in Mirassol and São José do Rio Preto, we maintain the same essence as always: carefully selected ingredients, thoughtful recipes and service that makes you feel right at home.',
+      'timeline-1998': 'First Santa Massa location founded in Mirassol, focused on handmade pasta and wood-fired pizzas.',
+      'timeline-2005': 'Expansion with Santa Massa Restaurante, broadening the menu to lunch service and full Italian dining experiences.',
+      'timeline-2015': 'Opening of the São José do Rio Preto location, bringing the Santa Massa tradition to the region\'s largest city.',
+      'timeline-hoje-label': 'Today',
+      'timeline-hoje': 'Three locations, over 25 years of history and thousands of families who choose Santa Massa for their most special memories.',
+      // Unidades
+      'unidades-label': 'Find us', 'unidades-title': 'Our <em>Locations</em>',
+      'unidade-pizzaria-desc': 'The home of artisan pizzas and traditional pasta. A warm, welcoming setting for family dinners or evenings with friends, with the authentic flavour that made the group famous.',
+      'unidade-restaurante-desc': 'The perfect lunch destination. Full buffet with hot dishes, fresh salads and artisan desserts. Italian cuisine with everyday charm.',
+      'unidade-riopreto-desc': 'The newest and most modern location. Pizzas, pasta and special dishes in a sophisticated setting in the heart of Rio Preto — perfect for any occasion.',
+      'horario-pizzaria': 'Tue–Sun: 6 pm to 11 pm',
+      'horario-restaurante': 'Mon–Fri: 11 am to 3 pm · Sat–Sun: 11 am to 4 pm',
+      'horario-riopreto': 'Tue–Sun: 6 pm to 11 pm',
+      'btn-reservar': 'Book a Table', 'btn-cardapio': 'View Menu',
+      // Cardápio
+      'cardapio-label': 'What we serve', 'cardapio-title': 'Our <em>Menu</em>',
+      'cardapio-body': 'Carefully selected ingredients, recipes with soul. Every dish tells a story.',
+      'tab-pizzaria': 'Pizzeria · Mirassol', 'tab-restaurante': 'Restaurant · Mirassol', 'tab-riopreto': 'Rio Preto',
+      // Galeria
+      'galeria-label': 'Moments & Flavours', 'galeria-title': 'Our <em>Gallery</em>',
+      'galeria-body': 'Every photo tells a story of flavour, care and hospitality.',
+      'gal-todos': 'All', 'gal-pizzas': 'Pizzas', 'gal-massas': 'Pasta',
+      'gal-ambiente': 'Ambience', 'gal-eventos': 'Events',
+      // Depoimentos
+      'dep-label': 'What our guests say',
+      'dep-title': 'Reviews & <em>Testimonials</em>',
+      // Delivery
+      'delivery-label': 'Order from home', 'delivery-title': 'Delivery & <em>iFood</em>',
+      'delivery-body': 'Santa Massa flavour delivered to your door. Choose your nearest location and order now.',
+      // Mapas
+      'mapas-label': 'How to get here', 'mapas-title': 'Our <em>Locations</em>',
+      'lbl-endereco': 'Address', 'lbl-horario-func': 'Opening hours',
+      'lbl-telefone': 'Phone / WhatsApp', 'lbl-estacionamento': 'Parking',
+      'estac-proprio': 'On-site parking available',
+      'estac-rua': 'Street parking and nearby partner lot available',
+      'btn-googlemaps': 'Open in Google Maps', 'btn-reservar-mapa': 'Book a Table',
+      'mapa-placeholder': '📍<br>Insert the Google Maps embed link<br>for this location here',
+      // Reservas
+      'res-label': 'Reserve your experience', 'res-title': 'Make a <em>Reservation</em>',
+      'res-body': 'Fill in your details below and you will be redirected to the WhatsApp of the chosen location to confirm your reservation.',
+      'res-form-title': 'Reservation Details',
+      'lbl-nome': 'Your name', 'ph-nome': 'Full name',
+      'lbl-tel': 'Phone / WhatsApp',
+      'lbl-pessoas': 'Number of guests',
+      'aviso-riopreto': '⚠ On Fridays and Saturdays the Rio Preto location accepts a maximum of 16 guests.',
+      'lbl-data': 'Preferred date', 'lbl-horario': 'Arrival time',
+      'opt-horario': 'Select a time',
+      'lbl-horario-limite': '(latest: 7:30 pm)',
+      'aviso-horario': '⚠ The latest arrival time is 7:30 PM. Tables will not be held after this time.',
+      'horario-info': '⏰ Reservations are held until 7:30 PM — this is the latest arrival time.',
+      'lbl-obs': 'Notes (optional)',
+      'ph-obs': 'Allergies, special occasion, seating preferences...',
+      'btn-enviar': 'Send Reservation via WhatsApp',
+      'form-note': 'You will be redirected to the WhatsApp of the chosen location. The reservation will be confirmed by the team.',
+      // Select options for unidade
+      'opt-pizzaria': 'Santa Massa Pizzeria — Mirassol',
+      'opt-restaurante': 'Santa Massa Restaurant — Mirassol',
+      'opt-riopreto': 'Santa Massa — Rio Preto',
+      // FAQ
+      'faq-label': 'Frequently asked questions', 'faq-title': '<em>FAQ</em>',
+      'faq-body': 'Everything you need to know before your visit.',
+      'faq-q1': 'Is there parking at the locations?',
+      'faq-a1': 'The Pizzeria and Restaurant in Mirassol have free on-site parking for guests. The Rio Preto location has street parking and partner lots within 100 metres.',
+      'faq-q2': 'Are pets welcome?',
+      'faq-a2': 'Pets are welcome in outdoor areas where available. For hygiene and health regulation reasons, they are not permitted inside the dining room. Please contact the desired location to confirm outdoor availability.',
+      'faq-q3': 'Do I need a reservation? Is there a minimum party size?',
+      'faq-a3': 'Reservations are not required but are strongly recommended, especially on Fridays, Saturdays and holidays. There is no minimum party size. The latest time for held reservations is 7:30 pm. The Rio Preto location accepts up to 16 guests on Fridays and Saturdays; for larger groups, please contact us directly via WhatsApp.',
+      'faq-q4': 'Are there any entrance fees or cover charges?',
+      'faq-a4': 'We do not charge a cover fee or artistic cover. Prices are per dish or buffet as listed on the menu. We occasionally run promotions for birthday guests — follow our social media to stay updated.',
+      'faq-q5': 'What payment methods are accepted?',
+      'faq-a5': 'We accept cash, debit and credit cards (Visa, Mastercard, Elo, Amex), Pix and meal vouchers. Instalment payments are available on credit cards depending on the card provider.',
+      'faq-q6': 'Do you host private events and celebrations?',
+      'faq-a6': 'Yes! We host birthdays, corporate dinners, celebrations and other special occasions. We offer custom menus and can reserve the full dining room for large groups. Contact the desired location via WhatsApp for a quote.',
+      'faq-q7': 'Do you have options for dietary restrictions?',
+      'faq-a7': 'Yes. Our menu includes vegetarian options and we can adapt certain dishes on request. For restrictions such as gluten intolerance or specific allergies, please inform us at the time of booking or let your server know.',
+      'faq-q8': 'Can I cancel or change a reservation?',
+      'faq-a8': 'Of course. To cancel or change your reservation, simply contact the location via WhatsApp at least 2 hours in advance. There are no cancellation fees. The team will confirm the change and help you reschedule.',
+      // Footer
+      'footer-tagline': 'Italian tradition in the heart of inland São Paulo. Three locations, one philosophy: genuine flavour and true hospitality.',
+      'footer-nav': 'Navigation', 'footer-unidades': 'Locations', 'footer-contato': 'Contact',
+      'footer-copy': '© 2025 Santa Massa Group · All rights reserved',
+    }
+  };
+
+  let currentLang = 'pt';
+
+  function setLang(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+
+    // Toggle button states (desktop + mobile)
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    const mobPt = document.getElementById('mob-btn-pt');
+    const mobEn = document.getElementById('mob-btn-en');
+    if (mobPt) mobPt.classList.toggle('active', lang === 'pt');
+    if (mobEn) mobEn.classList.toggle('active', lang === 'en');
+
+    // Update html lang attribute
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+
+    // Translate all [data-i18n] elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+
+    // Translate placeholders
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.getAttribute('data-i18n-ph');
+      if (t[key] !== undefined) el.placeholder = t[key];
+    });
+
+    // Translate select options for unidade
+    const sel = document.getElementById('res-unidade');
+    if (sel && lang === 'en') {
+      sel.options[1].text = t['opt-pizzaria']   || sel.options[1].text;
+      sel.options[2].text = t['opt-restaurante'] || sel.options[2].text;
+      sel.options[3].text = t['opt-riopreto']    || sel.options[3].text;
+    } else if (sel) {
+      sel.options[1].text = 'Santa Massa Pizzaria — Mirassol';
+      sel.options[2].text = 'Santa Massa Restaurante — Mirassol';
+      sel.options[3].text = 'Santa Massa — Rio Preto';
+    }
+
+    // Switch cardapio panels to correct language version
+    switchTab(activeTab);
+
+    // Update horario select labels
+    updateHorarios();
+
+    // Save preference
+    try { localStorage.setItem('sm-lang', lang); } catch(e) {}
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Safety net
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+  }, 800);
+
+  // Auto-detect browser language on first load
+  (function() {
+    let saved;
+    try { saved = localStorage.getItem('sm-lang'); } catch(e) {}
+    const nav = (navigator.language || 'pt').toLowerCase();
+    const preferred = saved || (nav.startsWith('en') ? 'en' : 'pt');
+    if (preferred === 'en') setLang('en');
+  })();
+</script>
+</body>
+</html>
